@@ -19,6 +19,7 @@
     "verify:swap": "node scripts/photo-swap-cls.mjs",
     "photos:fetch": "node scripts/fetch-photography.mjs",
     "photos:build": "node scripts/build-photography.mjs",
+    "credits": "node scripts/credits.mjs",
     "verify:perf": "node scripts/perf-check.mjs",
     "verify:art": "node scripts/art-direction-checks.mjs",
     "verify:text": "node scripts/glued-text-check.mjs"

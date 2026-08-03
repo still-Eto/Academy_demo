@@ -35,7 +35,10 @@ export default function ProgramsPage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {programs.map((p, i) => (
               <Reveal key={p.slug} delay={Math.min(i, 3) * 40}>
-                <ProgramCard program={p} />
+                {/* `withPhoto` here and nowhere else — this page had no
+                    photography at all while six graded room frames sat on disk
+                    being used once each. See the note on the prop. */}
+                <ProgramCard program={p} withPhoto />
               </Reveal>
             ))}
           </div>

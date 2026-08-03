@@ -87,6 +87,13 @@ export function ManagedImg({
     );
   }
 
+  /* No photograph AND no stand-in block: render nothing at all, rather than a
+     broken <img>. Only the portrait slots are declared this way, and they go
+     through ManagedAvatar rather than here — but the guard is what lets `src`
+     be optional in the manifest, which is what let seventeen dead silhouette
+     files be deleted. */
+  if (!image.src) return null;
+
   return (
     <div className={box} style={style}>
       <Image

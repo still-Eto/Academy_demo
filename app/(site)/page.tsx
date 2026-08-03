@@ -19,6 +19,7 @@ import { OpeningsBlock } from "@/components/openings-block";
 import { Reveal } from "@/components/reveal";
 import {
   ClosingCta,
+  DetailStrip,
   PhotoBand,
   ProgramCard,
   SectionHeading,
@@ -260,7 +261,27 @@ export default function HomePage() {
       </section>
 
       {/* ------------------------------------------------------------------
-          3 — SIX PROGRAM CARDS
+          3 — THE DETAIL STRIP
+
+          Four square crops of hands and materials, full-bleed, no words,
+          directly under the room availability numbers.
+
+          It goes HERE rather than lower down for one reason: the section above
+          it is the most administrative on the page — a table of rooms, dates
+          and space counts — and the section below it is six more cards of
+          ratios and prices. Between them was the longest stretch of the page
+          with nothing in it but numbers. Four photographs of a child's hands in
+          paint is the answer to "what is actually happening in those rooms",
+          and it costs about 190px on a phone.
+
+          Not wrapped in <Reveal>: it sits high enough that on a tall monitor it
+          is inside the first viewport, and a strip that fades in is a strip
+          that was briefly missing.
+         ------------------------------------------------------------------ */}
+      <DetailStrip />
+
+      {/* ------------------------------------------------------------------
+          4 — SIX PROGRAM CARDS
           Canvas, light, dense. The relief after the dark openings block, and
           the place the six existing bright activity photographs belong.
          ------------------------------------------------------------------ */}

@@ -502,8 +502,17 @@ const rooms = blocks
   if (lcpOk && priorityOk) pass("M2", "Exactly one LCP image, and only it gets `priority`", detail);
   else fail("M2", "Exactly one LCP image, and only it gets `priority`", detail);
 
-  /* M3 — every declared file exists on disk. */
-  const missing = allImages.filter((i) => {
+  /*
+    M3 — every declared file exists on disk.
+
+    `src` is optional: a portrait slot with no photograph renders an initials
+    monogram and wants no stand-in file at all. So the check is over the entries
+    that DO declare one. It is still the check that matters — it catches a
+    manifest path that has been renamed or deleted underneath the site — and it
+    no longer forces a dead file to exist for every entry that never reads it.
+  */
+  const withSrc = allImages.filter((i) => i.src);
+  const missing = withSrc.filter((i) => {
     try {
       statSync(join(root, "public", i.src.replace(/^\//, "")));
       return false;
@@ -515,7 +524,9 @@ const rooms = blocks
     pass(
       "M3",
       "Every manifest entry resolves to a file in /public",
-      `${allImages.length} files checked: ${[...new Set(allImages.map((i) => i.kind))].join(", ")}`,
+      `${withSrc.length} of ${allImages.length} entries declare a stand-in file, all present: ` +
+        `${[...new Set(withSrc.map((i) => i.kind))].join(", ")}. ` +
+        `${allImages.length - withSrc.length} portrait slots declare none by design.`,
     );
   } else {
     fail("M3", "Every manifest entry resolves to a file in /public", missing.map((i) => i.src).join(", "));

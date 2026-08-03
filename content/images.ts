@@ -88,8 +88,22 @@ export type Photo = {
 export type ManagedImage = {
   /** Manifest key, injected below. Also the filename stem of the derivatives. */
   id: string;
-  /** Path under /public. This is the only field a photo swap has to touch. */
-  src: string;
+  /**
+   * Path under /public for the wordless block that stands in until a
+   * photograph exists.
+   *
+   * OPTIONAL, and the seventeen staff portraits are why. A slot that has no
+   * photograph normally wants a block at the right aspect ratio, because the
+   * layout has to hold its shape either way. A portrait slot does not: an empty
+   * portrait renders as an initials monogram (see ManagedAvatar), which is a
+   * better answer than a face-shaped grey blank and does not need a file behind
+   * it. Seventeen byte-identical 342-byte silhouettes sat in public/img/staff/
+   * for exactly as long as this field was required, referenced by nothing.
+   *
+   * Absent means "there is no stand-in and none is wanted". `npm run verify`
+   * checks that every src which IS declared resolves to a real file.
+   */
+  src?: string;
   /** Set when a real photograph fills this slot. See `Photo` above. */
   photo?: Photo;
   /** What a screen reader says. Describe the photograph, not the intent. */
@@ -112,6 +126,76 @@ type Declared = Omit<ManagedImage, "id">;
 
 const landscape = (w = 1200, h = 800) => ({ width: w, height: h, orientation: "landscape" as const });
 const square = (size = 600) => ({ width: size, height: size, orientation: "square" as const });
+
+/* -------------------------------------------------------------------------
+   The detail strip.
+
+   Four square crops, edge to edge, in one row on the home page. They are the
+   only images on the site closer than about six feet from a child, and that
+   proximity is the entire point of them: five wides carrying fifteen routes is
+   what made the page read as a building rather than a school.
+
+   1:1 rather than 4:3 for two reasons. A square is the shape that survives
+   being four-up on a desktop and two-up on a phone without either row becoming
+   a letterbox — and it is visibly not the ratio of anything else on the site,
+   so the strip reads as a deliberate device rather than four more cards.
+
+   800px is the widest they are ever rendered: four across a 1568px shell is
+   392 CSS pixels, so 800 covers 2x. Nothing here needs a 2400px derivative.
+   ------------------------------------------------------------------------- */
+const details = {
+  "detail.paint": {
+    src: "/img/rooms/maple-1.svg",
+    photo: {
+      source: "hands-white-paint-table.jpg",
+      widths: [400, 800],
+      /* Portrait source, hands dead centre. "attention" goes to the high-
+         contrast printed sheet in the top left corner instead. */
+      crop: "center",
+    },
+    alt: "Two children's hands flat on a wooden table covered in white paint, one palm turned up",
+    kind: "room" as const,
+    ...square(800),
+  },
+  "detail.clay": {
+    src: "/img/rooms/maple-1.svg",
+    photo: {
+      source: "hands-clay-board.jpg",
+      widths: [400, 800],
+      crop: "attention",
+    },
+    alt: "A child's hands pressing down into a lump of white clay on a board, fingers stained with paint",
+    kind: "room" as const,
+    ...square(800),
+  },
+  "detail.pots": {
+    src: "/img/rooms/oak-2.svg",
+    photo: {
+      source: "paint-pots-overhead.jpg",
+      widths: [400, 800],
+      /* The frame is a tall overhead. The square wants the middle third, where
+         the spilled blue and the jar of brushes are; "attention" takes the
+         white palette at the bottom and loses every hand in the picture. */
+      crop: "center",
+    },
+    alt: "Looking down on three children's hands, open pots of poster paint and brushes standing in a jar, with spilled blue paint across the paper",
+    kind: "room" as const,
+    ...square(800),
+  },
+  "detail.drawing": {
+    src: "/img/rooms/maple-2.svg",
+    photo: {
+      source: "hands-crayons-drawing.jpg",
+      widths: [400, 800],
+      /* "attention" reads the dark window grille at the top right as the
+         busiest region. The subject is the paper, which is the middle. */
+      crop: "center",
+    },
+    alt: "Looking down on a large sheet of paper covered in crayon flowers, with two children's hands still drawing on it",
+    kind: "room" as const,
+    ...square(800),
+  },
+} satisfies Record<string, Declared>;
 
 /* -------------------------------------------------------------------------
    Hero
@@ -235,22 +319,46 @@ const bands = {
    parent quotes on the home page, so it should be the stronger of the two.
    ------------------------------------------------------------------------- */
 const rooms = {
+  /*
+    Both Acorn slots were wordless blocks for a good reason, now spent.
+
+    The reason was age: every photograph in the set showed a toddler or a
+    preschooler, a parent of a six-week-old spots that instantly, and a wrong
+    frame here would have undermined the 1:3 infant ratio printed beside it.
+    An empty slot cost nothing; a wrong one would have cost the room.
+
+    These two are infants, from one shoot, and neither shows a face — so there
+    is no age for a parent to argue with. What they are NOT is a photograph of
+    this room: they are close crops on a rug and a wood floor, and the alt text
+    says a rug and a wood floor. The claim the page makes is the ratio, which is
+    printed; the photograph is only asked to show a baby at floor level, which
+    is what it does.
+  */
   "room.acorn.1": {
     src: "/img/rooms/acorn-1.svg",
-    alt: `The ${named("acorn")}, showing the low window bench and the six cribs along the far wall`,
+    photo: {
+      source: "infant-blocks-floor.jpg",
+      widths: [400, 760, 1200],
+      /* A 3:2 slot out of a 2:3 source keeps 44% of the height, so the choice
+         here is which 44%. "attention" reads the woven rug as the busiest
+         region and crops to carpet. "north" was worse: it took the top of the
+         frame, which is torso, and left the hands and the block on the bottom
+         edge — a close-up of a baby's middle. "center" is the band with the
+         hands, the block and the first row of rug in it. */
+      crop: "center",
+    },
+    alt: "A seated baby turning a wooden picture block over in both hands, more blocks on the rug in front",
     kind: "room" as const,
     ...landscape(),
   },
-  /*
-    Both Acorn slots stay wordless blocks, deliberately. Every photograph we
-    have shows a toddler or a preschooler, and a parent of a six-week-old spots
-    an age mismatch instantly — it would undermine the 1:3 infant figure
-    printed next to it. An empty slot costs nothing; a wrong one costs the
-    room's credibility.
-  */
   "room.acorn.2": {
     src: "/img/rooms/acorn-2.svg",
-    alt: `Treasure baskets and a floor mirror set out on the mat in the ${named("acorn")}`,
+    photo: {
+      source: "infant-alphabet-blocks.jpg",
+      widths: [400, 760, 1200],
+      crop: "center",
+    },
+    alt: "A baby sitting barefoot on a woven rug with painted wooden blocks scattered within reach",
     kind: "room" as const,
     ...landscape(),
   },
@@ -265,9 +373,18 @@ const rooms = {
     kind: "room" as const,
     ...landscape(),
   },
+  /* The brief for this slot asks for the sensory table. Nothing in the free
+     libraries is a sensory table in use — they are all either an empty tub or a
+     kitchen. A child at the top of this room's age band with both hands on the
+     material is the same claim, honestly made. */
   "room.sunflower.2": {
     src: "/img/rooms/sunflower-2.svg",
-    alt: `The sensory table in the ${named("sunflower")}, filled with dry oats and scoops`,
+    photo: {
+      source: "toddler-stacking-rings.jpg",
+      widths: [400, 760, 1200],
+      crop: "attention",
+    },
+    alt: "A toddler on a jute mat threading a wooden ring onto a post, alphabet puzzle pieces behind",
     kind: "room" as const,
     ...landscape(),
   },
@@ -321,15 +438,34 @@ const rooms = {
     kind: "room" as const,
     ...landscape(),
   },
+  /* Both from the 8422xxx shoot, which also supplies room.maple.2 — so the
+     light on this page is the light on that one, and neither reads borrowed.
+     The A–Z chart in both frames was checked at full resolution and is English;
+     the reading frames from the OTHER classroom shoot were not, and the note in
+     scripts/fetch-photography.mjs records which and why. */
   "room.summit.1": {
     src: "/img/rooms/summit-1.svg",
-    alt: `The writing table in the ${named("summit")}, set with journals and pencil cups`,
+    photo: {
+      source: "alphabet-chart-lesson.jpg",
+      widths: [400, 760, 1200],
+      crop: "attention",
+    },
+    alt: "Two teachers holding up an illustrated alphabet chart in front of a seated group of children",
     kind: "room" as const,
     ...landscape(),
   },
   "room.summit.2": {
     src: "/img/rooms/summit-2.svg",
-    alt: `The small-group corner in the ${named("summit")}, with a magnetic letter board`,
+    photo: {
+      source: "letter-lesson-seated.jpg",
+      widths: [400, 760, 1200],
+      /* Native 3:2, so the crop barely moves and any strategy would do. The
+         letters the teachers hold up are single cards rather than the A–Z chart
+         in room.summit.1, and the magnetic board behind them is thrown far
+         enough out of focus that nothing on it resolves at card width. */
+      crop: "attention",
+    },
+    alt: "Six children on low chairs seen from behind, watching two teachers hold up letter cards",
     kind: "room" as const,
     ...landscape(),
   },
@@ -415,11 +551,21 @@ const staffPortraits = [
   ["rosa-delgado", "Rosa Delgado", "Cook"],
 ] as const;
 
+/*
+  No `src`. These seventeen entries carried a path to seventeen identical
+  342-byte grey silhouettes, and nothing rendered them — ManagedAvatar has drawn
+  an initials monogram from the person's name since the day it was written. The
+  files stayed because the type required the field and `npm run verify` checked
+  that the field resolved, so a dead reference kept seventeen dead files alive.
+
+  The day real portraits exist, they arrive the same way every other photograph
+  does: drop them in _source, add `photo` here, run `npm run photos:build`. The
+  component already branches on `photo` and not on `src`.
+*/
 const portraits = Object.fromEntries(
   staffPortraits.map(([slug, name, role]) => [
     `staff.${slug}`,
     {
-      src: `/img/staff/${slug}.svg`,
       alt: `${name}, ${role}`,
       kind: "portrait" as const,
       ...square(),
@@ -454,6 +600,7 @@ const other = {
 const declared = {
   ...hero,
   ...bands,
+  ...details,
   ...rooms,
   ...building,
   ...portraits,
@@ -504,6 +651,20 @@ export const bandImages = {
   safety: images["band.safety"],
   closing: images["band.closing"],
 } as const;
+
+/**
+ * The four detail crops, in the order they appear across the strip.
+ *
+ * Order is composition, not chronology: paint, clay, pots, blocks puts the one
+ * frame with three children in it — and the only one with any motion — third,
+ * where the eye lands after it has already been drawn across two quiet ones.
+ */
+export const detailImages = [
+  images["detail.paint"],
+  images["detail.clay"],
+  images["detail.pots"],
+  images["detail.drawing"],
+] as const;
 
 /**
  * The path stem of a slot's graded derivatives, e.g. "/photos/room-oak-1".

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { bandImages, type ManagedImage } from "@/content/images";
+import { bandImages, detailImages, type ManagedImage } from "@/content/images";
 import { availabilityChip, availabilityWords, type Availability, type Program } from "@/content/programs";
 import { site, trustLine } from "@/content/site.config";
 import { ArrowRight, Calendar, Check, Clock } from "./icons";
@@ -116,12 +116,33 @@ export function ProgramCard({
    * home page.
    */
   compactOnMobile = false,
+  /**
+   * Put the room's own photograph at the top of the card.
+   *
+   * Off by default, and ON for the six cards on /programs — a page that was
+   * fifteen hundred words and a table with not one photograph on it, while six
+   * graded room photographs already sat on disk being used once each. This is
+   * the cheapest image on the site: no new sourcing, no new grading, one
+   * derivative set serving two pages.
+   *
+   * It stays off on the home page. Those six cards are already below a
+   * full-bleed band and a four-frame strip, and six more photographs there
+   * would push the openings table and the tuition figures another screen down
+   * on a phone for no argument gained.
+   *
+   * A room with no photograph renders no image rather than a wordless block:
+   * the block is the right answer at 1200px on the room page and reads as a
+   * failed load at 380px on a card.
+   */
+  withPhoto = false,
 }: {
   program: Program;
   dense?: boolean;
   compactOnMobile?: boolean;
+  withPhoto?: boolean;
 }) {
   const secondary = compactOnMobile ? "hidden sm:block" : "";
+  const photo = withPhoto ? program.photos.find((p) => p.photo) : undefined;
 
   return (
     /*
@@ -133,59 +154,80 @@ export function ProgramCard({
       No aria-label: the card's own text already names the link, and an
       aria-label that does not contain the visible text is a 2.5.3 failure.
     */
-    <Link href={`/programs/${program.slug}`} className="card flex h-full flex-col p-4 sm:p-5 lg:p-6">
-      <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
-        <div>
-          <h3 className="text-[1.25rem] leading-tight lg:text-[1.375rem]">
-            {program.label}
-            {/* A room name never appears without its age range beside it —
-                on the same line at mobile width, on its own line above `sm`. */}
-            {compactOnMobile && (
-              <span className="font-sans text-[0.9375rem] font-semibold text-muted sm:hidden">
-                {" "}
-                · {program.ages}
-              </span>
-            )}
-          </h3>
-          <p className={`mt-1 text-[0.9375rem] font-semibold text-muted ${secondary}`}>
-            {program.ages}
-          </p>
-        </div>
-        <AvailabilityChip availability={program.availability} />
-      </div>
-
-      <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-line py-2.5 text-[0.9375rem] lg:mt-4 lg:py-4">
-        <div>
-          <dt className="text-muted">Ratio</dt>
-          <dd className="font-semibold">
-            {program.ratio}{" "}
-            <span className="font-normal text-muted">(IL {program.stateRatio})</span>
-          </dd>
-        </div>
-        <div>
-          <dt className="text-muted">5 days a week</dt>
-          <dd className="font-semibold">${program.rate5}/week</dd>
-        </div>
-        <div className={secondary}>
-          <dt className="text-muted">Class size</dt>
-          <dd className="font-semibold">{program.classSize} children</dd>
-        </div>
-        <div className={secondary}>
-          <dt className="text-muted">Hours</dt>
-          <dd className="font-semibold">{program.hours}</dd>
-        </div>
-      </dl>
-
-      {!dense && (
-        <p className={`mt-4 text-[0.9375rem] leading-relaxed text-muted ${secondary}`}>
-          {program.oneLiner}
-        </p>
+    <Link
+      href={`/programs/${program.slug}`}
+      className={`card group flex h-full flex-col ${photo ? "overflow-hidden p-0" : "p-4 sm:p-5 lg:p-6"}`}
+    >
+      {photo && (
+        /*
+          4:3 rather than the 3:2 the file is cut at. A card in a three-up grid
+          is about 380px wide, and 3:2 makes that a 253px-tall photograph on top
+          of 240px of table — the picture wins an argument it should not be in.
+          4:3 brings it to 285px and the numbers stay the reason the card
+          exists. `object-cover` on a ratio box is the same no-CLS path every
+          other image takes.
+        */
+        <ManagedImg
+          image={photo}
+          sizes="(min-width: 1024px) 24rem, (min-width: 640px) 45vw, 92vw"
+          ratioClassName="aspect-[4/3]"
+          imgClassName="transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
+        />
       )}
+      <div className={photo ? "flex flex-1 flex-col p-4 sm:p-5 lg:p-6" : "contents"}>
+        <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+          <div>
+            <h3 className="text-[1.25rem] leading-tight lg:text-[1.375rem]">
+              {program.label}
+              {/* A room name never appears without its age range beside it —
+                  on the same line at mobile width, on its own line above `sm`. */}
+              {compactOnMobile && (
+                <span className="font-sans text-[0.9375rem] font-semibold text-muted sm:hidden">
+                  {" "}
+                  · {program.ages}
+                </span>
+              )}
+            </h3>
+            <p className={`mt-1 text-[0.9375rem] font-semibold text-muted ${secondary}`}>
+              {program.ages}
+            </p>
+          </div>
+          <AvailabilityChip availability={program.availability} />
+        </div>
 
-      <span className="mt-auto flex items-center gap-1.5 pt-2.5 font-semibold text-brand underline underline-offset-4 lg:min-h-[48px] lg:pt-4">
-        <span>Inside the {program.label}</span>
-        <ArrowRight />
-      </span>
+        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-line py-2.5 text-[0.9375rem] lg:mt-4 lg:py-4">
+          <div>
+            <dt className="text-muted">Ratio</dt>
+            <dd className="font-semibold">
+              {program.ratio}{" "}
+              <span className="font-normal text-muted">(IL {program.stateRatio})</span>
+            </dd>
+          </div>
+          <div>
+            <dt className="text-muted">5 days a week</dt>
+            <dd className="font-semibold">${program.rate5}/week</dd>
+          </div>
+          <div className={secondary}>
+            <dt className="text-muted">Class size</dt>
+            <dd className="font-semibold">{program.classSize} children</dd>
+          </div>
+          <div className={secondary}>
+            <dt className="text-muted">Hours</dt>
+            <dd className="font-semibold">{program.hours}</dd>
+          </div>
+        </dl>
+
+        {!dense && (
+          <p className={`mt-4 text-[0.9375rem] leading-relaxed text-muted ${secondary}`}>
+            {program.oneLiner}
+          </p>
+        )}
+
+        <span className="mt-auto flex items-center gap-1.5 pt-2.5 font-semibold text-brand underline underline-offset-4 lg:min-h-[48px] lg:pt-4">
+          <span>Inside the {program.label}</span>
+          <ArrowRight />
+        </span>
+      </div>
     </Link>
   );
 }
@@ -229,6 +271,58 @@ export function PhotoBand({
   return (
     <div className={`relative h-[36vh] min-h-[240px] overflow-hidden bg-ground lg:h-[42vh] ${className}`}>
       <ManagedImg image={image} sizes="100vw" fill imgClassName={focus} />
+    </div>
+  );
+}
+
+/* --------------------------------------------------------------------------
+   The detail strip.
+
+   Four square photographs in one full-bleed row, no gap, no caption, no words.
+   Two up on a phone, four up from `sm`.
+
+   WHY THIS EXISTS. The site had five photographs carrying fifteen routes, and
+   every one of them was a wide — a room, a group, a playground. Nothing was
+   closer than about six feet from a child, which is what made a page about
+   forty children read as a page about a building. This is the cheapest
+   available fix: four tight crops of hands and materials, about 190px tall on
+   a phone and 300 on a desktop, dropped between two sections that were already
+   adjacent. It buys proximity for almost no vertical space, which matters on a
+   page whose mobile scroll height is already 11,000px.
+
+   No gap between the four, deliberately. Gutters would make this a gallery of
+   four pictures; butted edge to edge it is one band that happens to be made of
+   four, and it sits in the same family as the full-bleed PhotoBand above it.
+
+   `sizes` is exact rather than "100vw": each tile is a quarter of the viewport
+   from `sm` and a half below it, so a phone fetches the 400px file and not the
+   800px one.
+   -------------------------------------------------------------------------- */
+export function DetailStrip() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-4">
+      {detailImages.map((image) => (
+        <ManagedImg
+          key={image.id}
+          image={image}
+          sizes="(min-width: 640px) 25vw, 50vw"
+          /*
+            The manifest declares these 1:1 and the container honours that on a
+            phone, where two-up at 50vw is a 195px square and the crop is tight
+            enough to read. From `sm` the tile is a quarter of the width, and a
+            square quarter of a 1568px shell would be a 392px-tall band — half
+            the height of the hero, for four supporting images. `aspect-[5/4]`
+            from `sm` holds it to about 300px instead.
+
+            The ratio override is a container class, not a re-crop: the file is
+            still the square the build wrote, and `object-cover` takes the
+            middle of it. Every one of the four has its subject centred, which
+            is why that is safe here and would not be on the bands.
+          */
+          ratioClassName="aspect-square sm:aspect-[5/4]"
+          imgClassName="transition-transform duration-500 ease-out motion-safe:hover:scale-[1.03]"
+        />
+      ))}
     </div>
   );
 }

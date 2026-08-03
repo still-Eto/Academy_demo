@@ -48,12 +48,24 @@ export function HeroMedia() {
 
   if (!photo) {
     /* The wordless block, for a re-skin that has not been given photography
-       yet. The scrim still runs, so the type over it is legible either way. */
+       yet. The scrim still runs, so the type over it is legible either way.
+
+       `src` is optional on the manifest now (portraits declare none), so this
+       branch checks for it. A hero with neither a photograph nor a block is the
+       dark ground and the scrim, which is still a legible hero. */
+    if (!heroImage.src) {
+      return (
+        <div className={box}>
+          <div className="scrim-hero absolute inset-0" />
+        </div>
+      );
+    }
+    const block = heroImage.src;
     return (
       <div className={box}>
-        <link rel="preload" as="image" href={heroImage.src} fetchPriority="high" />
+        <link rel="preload" as="image" href={block} fetchPriority="high" />
         <Image
-          src={heroImage.src}
+          src={block}
           alt={heroImage.alt}
           fill
           priority
@@ -62,7 +74,7 @@ export function HeroMedia() {
           sizes="100vw"
           className="object-cover"
         />
-        {video && <HeroClip src={video} poster={heroImage.src} />}
+        {video && <HeroClip src={video} poster={block} />}
         <div className="scrim-hero absolute inset-0" />
       </div>
     );

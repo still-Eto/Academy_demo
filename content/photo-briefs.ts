@@ -54,12 +54,37 @@ export const shotBriefs: Record<string, ShotBrief> = {
     subject: "The playground at the end of the day, empty, sun low and behind the structure. Backlit, everything else in shadow. This sits under 'come and see the room your child would be in'.",
     timeOfDay: "Evening, the last 40 minutes before 6:00pm pickup ends",
   },
+  /*
+    The detail strip. Four square frames, shot closer than anything else on the
+    site — near enough that a hand fills a third of the picture.
+
+    Shoot all four in one session in one room, because they run in a single row
+    with no gap between them and any change of light shows as a seam. The rule
+    for every one of them: something is being done to something. A tidy tray of
+    materials is not this photograph, however good it looks.
+  */
+  "detail.paint": {
+    subject: "Hands flat on a paint-covered table, close enough that the table fills the frame. No face, no arms above the elbow. Let the paint be genuinely messy — handprints, smears, a palm print half wiped out.",
+    timeOfDay: "Any, window light, no flash",
+  },
+  "detail.clay": {
+    subject: "Two hands working a lump of clay or dough on a board, shot from directly above at close range. Stained fingers. The material half-formed, not finished.",
+    timeOfDay: "Any, window light, no flash",
+  },
+  "detail.pots": {
+    subject: "Straight down onto a table: open paint pots, brushes in a jar, at least three pairs of hands crossing the frame, and something spilled. The one frame in the strip with more than one child in it — it carries the motion.",
+    timeOfDay: "Any, window light, no flash",
+  },
+  "detail.drawing": {
+    subject: "Straight down onto a sheet of paper a child has actually drawn on, hands still working, crayons held rather than laid out. Shoot on wood, not on a white table — a near-white background owns the exposure match and the frame will grade cold against the rest of the strip.",
+    timeOfDay: "Any, window light, no flash",
+  },
   "room.acorn.1": {
-    subject: "Acorn Room, 6 weeks – 15 months — the window bench and the six cribs along the far wall",
-    timeOfDay: "Mid-morning, during first nap, blinds half drawn",
+    subject: "Acorn Room, 6 weeks – 15 months — a baby at floor level, hands on a wooden toy, framed below the shoulders so the picture is about the hands. The room can stay out of it; what this slot has to establish is the age.",
+    timeOfDay: "Mid-morning, floor time, blinds half drawn",
   },
   "room.acorn.2": {
-    subject: "Acorn Room, 6 weeks – 15 months — treasure baskets and the floor mirror on the mat",
+    subject: "Acorn Room, 6 weeks – 15 months — the same baby on the mat from a low, wide angle, treasure baskets and the floor mirror within reach",
     timeOfDay: "Mid-morning, floor time",
   },
   "room.sunflower.1": {

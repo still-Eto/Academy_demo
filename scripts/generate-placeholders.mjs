@@ -128,7 +128,19 @@ function signature({ width: w, height: h }) {
 
 /* ---------- generate every entry in the manifest ---------- */
 let written = 0;
+let skipped = 0;
 for (const image of allImages) {
+  /*
+    No `src` means the slot deliberately has no stand-in — the seventeen staff
+    portraits, which render an initials monogram instead. Generating a block for
+    them is what produced seventeen byte-identical grey silhouettes that nothing
+    ever rendered. Skip them, or `npm run placeholders` puts the dead files back.
+  */
+  if (!image.src) {
+    skipped++;
+    continue;
+  }
+
   const body =
     image.kind === "portrait"
       ? portrait(image)
@@ -162,5 +174,6 @@ await writeFile(
 );
 
 console.log(
-  `Wrote ${written} placeholders + app/icon.svg from content/images.ts using palette ${palette.primary} / ${palette.accent}`,
+  `Wrote ${written} placeholders + app/icon.svg from content/images.ts using palette ${palette.primary} / ${palette.accent}` +
+    (skipped ? ` · skipped ${skipped} slots that declare no stand-in (portraits render initials)` : ""),
 );
