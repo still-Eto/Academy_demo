@@ -1,0 +1,11 @@
+verification/
+.next/
+node_modules/
+*.tsbuildinfo
+.env*
+.vercel
+
+# Source photography. The graded derivatives beside it are what the site
+# serves; these originals are only needed by `npm run photos:build`, which
+# runs locally. Keeps ~3MB of never-fetched JPEGs out of the deployment.
+public/photos/_source/

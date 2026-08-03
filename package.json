@@ -1,0 +1,47 @@
+{
+  "name": "bridgewood-academy",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "verify": "node scripts/verify.mjs",
+    "verify:browser": "node scripts/browser-checks.mjs",
+    "verify:lighthouse": "node scripts/lighthouse-check.mjs",
+    "verify:jsonld": "node scripts/jsonld-check.mjs",
+    "shots": "node scripts/screenshots.mjs",
+    "reskin-proof": "node scripts/reskin-proof.mjs",
+    "placeholders": "node scripts/generate-placeholders.mjs",
+    "photo-doc": "node scripts/photo-swap-doc.mjs",
+    "verify:fix-brief": "node scripts/fix-brief-checks.mjs",
+    "verify:swap": "node scripts/photo-swap-cls.mjs",
+    "photos:fetch": "node scripts/fetch-photography.mjs",
+    "photos:build": "node scripts/build-photography.mjs",
+    "verify:perf": "node scripts/perf-check.mjs",
+    "verify:art": "node scripts/art-direction-checks.mjs",
+    "verify:text": "node scripts/glued-text-check.mjs"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.6.0",
+    "next": "16.2.12",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.84.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "16.2.12",
+    "lighthouse": "^13.4.1",
+    "playwright": "^1.62.1",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  }
+}

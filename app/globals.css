@@ -1,0 +1,851 @@
+@import "tailwindcss";
+
+/*
+  ---------------------------------------------------------------------------
+  THEME
+  Every token below points at a CSS custom property that app/layout.tsx emits
+  from content/site.config.ts. `@theme inline` makes Tailwind's utilities
+  reference the variable rather than copy its value, which is what lets a
+  single edit in site.config.ts re-skin the whole site.
+  ---------------------------------------------------------------------------
+*/
+@theme inline {
+  --color-bg: var(--brand-bg);
+  --color-surface: var(--brand-surface);
+  --color-ink: var(--brand-ink);
+  --color-muted: var(--brand-ink-muted);
+  --color-line: var(--brand-line);
+
+  --color-brand: var(--brand-primary);
+  --color-brand-dark: var(--brand-primary-dark);
+  --color-brand-tint: var(--brand-primary-tint);
+
+  --color-accent: var(--brand-accent);
+  --color-accent-dark: var(--brand-accent-dark);
+  --color-on-accent: var(--brand-on-accent);
+  --color-on-primary: var(--brand-on-primary);
+
+  --color-good: var(--brand-status-good);
+  --color-good-bg: var(--brand-status-good-bg);
+  --color-wait: var(--brand-status-wait);
+  --color-wait-bg: var(--brand-status-wait-bg);
+
+  /* The dark ground and its ornament. See the note in site.config.ts. */
+  --color-ground: var(--brand-ground);
+  --color-sand: var(--brand-sand);
+  --color-deep: var(--brand-deep);
+  --color-on-ground: var(--brand-on-ground);
+  --color-brass: var(--brand-brass);
+  --color-brass-dark: var(--brand-brass-dark);
+
+  --font-serif: var(--font-heading), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-body), system-ui, -apple-system, sans-serif;
+
+  --radius-card: 10px;
+
+  /* Shadows soft to the point of nearly invisible. No glow, ever. */
+  --shadow-soft:
+    0 1px 2px color-mix(in srgb, var(--brand-ink) 4%, transparent),
+    0 4px 12px color-mix(in srgb, var(--brand-ink) 5%, transparent);
+  --shadow-lift:
+    0 2px 4px color-mix(in srgb, var(--brand-ink) 5%, transparent),
+    0 8px 24px color-mix(in srgb, var(--brand-ink) 7%, transparent);
+}
+
+@layer base {
+  :root {
+    /* Explicit, so no browser inverts the palette into something unreadable. */
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Anchored sections must clear the sticky desktop header. */
+    scroll-padding-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    /* 17px on mobile, per the type spec. */
+    font-size: 17px;
+    line-height: 1.6;
+    /* Belt and braces against a stray wide child. */
+    overflow-x: hidden;
+  }
+
+  @media (min-width: 1024px) {
+    body {
+      font-size: 18px;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.011em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /*
+    A focus ring that is emphatically not the browser default, and that stays
+    visible on the dark brand surfaces too (see .on-dark below).
+  */
+  :focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-bg);
+  }
+
+  /* The arches cut out of the logomark tile. See components/icons.tsx. */
+  .logomark {
+    --logomark-void: var(--color-bg);
+  }
+
+  .on-dark .logomark {
+    --logomark-void: var(--color-ground);
+  }
+
+  /* Inputs at 16px minimum — anything smaller triggers iOS auto-zoom. */
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+    font-size: max(16px, 1em);
+  }
+
+
+  ::selection {
+    background-color: var(--color-brand-tint);
+    color: var(--color-brand-dark);
+  }
+}
+
+@layer components {
+  /* Measure capped at roughly 68 characters. */
+  .measure {
+    max-width: 68ch;
+  }
+
+  .measure-tight {
+    max-width: 58ch;
+  }
+
+  /*
+    Capped at 1440px and centered. Past that the columns keep the same
+    relationship to each other instead of drifting apart — at 2560 the hero was
+    a thin strip of content in the middle of a very wide page. The inner
+    measure is 1360px at every viewport from 1440 up, so the headline,
+    sub-line, buttons and image sit identically at 1440, 1920 and 2560.
+  */
+  .shell {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Section padding: 48px mobile, 96–120px desktop. The mobile figure is
+     deliberately tighter than the desktop one — seventeen phone screens of
+     scroll is its own kind of unreadable. */
+  .section {
+    padding-block: 48px;
+  }
+
+  @media (min-width: 1024px) {
+    .section {
+      padding-block: 104px;
+    }
+  }
+
+  .section-tight {
+    padding-block: 40px;
+  }
+
+  @media (min-width: 1024px) {
+    .section-tight {
+      padding-block: 88px;
+    }
+  }
+
+  /*
+    The tall one. Nine sections at an identical 104px was the tempo problem —
+    the page had no accents, so nothing in it could be emphasised. The three
+    dark signature sections take this instead, and the extra 40px is doing the
+    same job a dark ground does: telling you this one matters more than the one
+    above it.
+  */
+  .section-tall {
+    padding-block: 64px;
+  }
+
+  @media (min-width: 1024px) {
+    .section-tall {
+      padding-block: 144px;
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     THE HERO SCRIM
+
+     Two gradients over one photograph, and the reason there are two is that a
+     single bottom-up ramp cannot serve both ends of the section.
+
+     Layer 2 (bottom-up) is the one the design calls for: 76% of `ground` at the
+     foot, thinning to 20% at the head. It is what puts the headline on
+     something and what gives the photograph its depth.
+
+     Layer 1 (top-down, short) exists for the navigation. The nav overlays the
+     hero in white with no fill of its own, and at the top of layer 2 alone it
+     would be white type on 20% of dark over whatever the photograph happens to
+     be doing up there — which in this frame is a white wall. Measured: 1.2:1.
+     Layer 1 takes the top 30% to a combined figure that puts the same white
+     type well clear of it.
+
+     IT IS A LEFT-BIASED RAMP NOW, NOT A BOTTOM-UP ONE, AND THAT IS THE WHOLE
+     TRICK. A bottom-up scrim darkens the entire width of the frame to make one
+     column of type legible — so at 94% the hero read as evening, and at 76% it
+     still cost the photograph most of its daylight. But the type is not spread
+     across the width: it sits in the left two thirds and the right third is
+     nothing but picture. Weighting the darkness to where the words are lets the
+     right of the frame come up to 8%, which is where the brightness went.
+
+     Measured on the rendered page rather than modelled, because the number that
+     decides it is white against the brightest pixel the photograph actually
+     contains — see item 4 of `npm run verify:art`.
+     ------------------------------------------------------------------------ */
+  .scrim-hero {
+    background-image:
+      /* 1. The nav band. Short, top-down, so white nav type never lands on a
+            white wall. */
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-ground) 62%, transparent) 0%,
+        color-mix(in srgb, var(--color-ground) 34%, transparent) 12%,
+        transparent 26%
+      ),
+      /* 2. The type band. LEFT-BIASED, which is the change that let the rest of
+            the scrim come off. The headline, the sub-line, both calls to action
+            and the trust line all live in the left two thirds of the shell; the
+            right third carries nothing but photograph. Weighting the darkness to
+            where the words are means the words keep their contrast and the
+            picture keeps its daylight — instead of the whole frame paying for
+            the paragraph. */
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-ground) 70%, transparent) 0%,
+        color-mix(in srgb, var(--color-ground) 68%, transparent) 52%,
+        color-mix(in srgb, var(--color-ground) 60%, transparent) 63%,
+        color-mix(in srgb, var(--color-ground) 24%, transparent) 80%,
+        color-mix(in srgb, var(--color-ground) 8%, transparent) 100%
+      ),
+      /* 3. A light bottom-up ramp, to seat the plinth. */
+      linear-gradient(
+        to top,
+        color-mix(in srgb, var(--color-ground) 46%, transparent) 0%,
+        color-mix(in srgb, var(--color-ground) 30%, transparent) 34%,
+        color-mix(in srgb, var(--color-ground) 12%, transparent) 68%,
+        transparent 100%
+      );
+  }
+
+
+  /* ------------------------------------------------------------------------
+     THE FLAT SCRIMS
+
+     For the two sections that run a photograph as their GROUND rather than as
+     their subject: the day timeline and the closing band.
+
+     Both sit on `low-key` graded images — `band.day` at mean luma 46 and
+     `band.closing` at 37, against 148 for everything else on the site — so the
+     instinct is to go lighter here than on the hero. That instinct is half
+     right. A mean of 46 says nothing about the peaks, and both frames have
+     them: a cream sweater at 245 and a sun flare that is blown to 254. Text
+     lands on those peaks, not on the mean.
+
+     Measured at 58%, the day section put white type on a 4.35:1 patch and the
+     closing band on 3.22:1. Both are set from the peak instead of the mean,
+     which is what the numbers below are: the scrim at which the brightest pixel
+     in the frame still clears 4.5:1 with margin, verified by sampling the
+     rendered page rather than by modelling it.
+
+     THE SOURCE IMAGES ARE BRIGHTER NOW, SO THESE COULD COME DOWN. Both frames
+     were graded to a mean of 46 and then covered by 70%. Between the two they
+     were invisible. The grade target moved to 75 and these dropped with it —
+     the point was never a dark rectangle, it was a photograph a parent can see
+     with words legible over it.
+     ------------------------------------------------------------------------ */
+
+  /* The day timeline. Its text covers the full width at every breakpoint, so
+     there is nowhere the photograph can be left bright. */
+  .scrim-flat {
+    background-color: color-mix(in srgb, var(--color-ground) 71%, transparent);
+  }
+
+  /*
+     The closing band. Its text is a single `measure` column, so from `lg` the
+     scrim is a horizontal ramp instead: heavy under the column, thinning to
+     the right where nothing but the photograph is. That is 60% of the frame
+     visible at close to full strength, on a section whose whole job is to make
+     someone want to come and stand in the place.
+
+     Below `lg` the column is the full width, so it stays uniform.
+  */
+  .scrim-side {
+    background-color: color-mix(in srgb, var(--color-ground) 70%, transparent);
+  }
+
+  @media (min-width: 1024px) {
+    .scrim-side {
+      background-color: transparent;
+      background-image: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-ground) 81%, transparent) 0%,
+        color-mix(in srgb, var(--color-ground) 77%, transparent) 40%,
+        color-mix(in srgb, var(--color-ground) 46%, transparent) 66%,
+        color-mix(in srgb, var(--color-ground) 26%, transparent) 100%
+      );
+    }
+  }
+
+  /*
+    Tap targets. 48x48 minimum with 8px between neighbours is not a nicety on
+    a phone held in one hand at 9:40pm — it is the difference between booking
+    a tour and closing the tab.
+  */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 52px;
+    padding-inline: 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    /* Measured against the accent fill by `npm run verify` — item 14. */
+    color: var(--color-on-accent);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-dark);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-brand);
+    border: 2px solid var(--color-brand);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-brand-tint);
+  }
+
+  .btn-ghost-light {
+    background-color: transparent;
+    color: var(--color-bg);
+    border: 2px solid color-mix(in srgb, var(--color-bg) 55%, transparent);
+  }
+
+  .btn-ghost-light:hover {
+    background-color: color-mix(in srgb, var(--color-bg) 12%, transparent);
+  }
+
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+  }
+
+  /* ------------------------------------------------------------------------
+     ORNAMENT
+
+     Three devices, each used more than once, each structural. The rule for all
+     three is that they mark a boundary or a corner that already exists — none
+     of them is a decoration dropped into open space, which is the difference
+     between ornament and clip art.
+
+     They inherit `currentColor`, so the same markup draws in `brass` on a dark
+     section and `brassDark` on a light one, set by whichever eyebrow colour
+     rule is in scope. Nothing here hard-codes a tone.
+     ------------------------------------------------------------------------ */
+
+  /* 1. A hairline with a centered diamond. Section divider, and the plinth rule
+        under the hero trust line. */
+  .rule-diamond {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-brass-dark);
+  }
+
+  .on-dark .rule-diamond,
+  .rule-diamond-light {
+    color: var(--color-brass);
+  }
+
+  .rule-diamond::before,
+  .rule-diamond::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0.55;
+  }
+
+  /* The diamond itself is a rotated square rather than a glyph, so it cannot be
+     read out by a screen reader and cannot be missing from a font. */
+  .rule-diamond > span {
+    width: 6px;
+    height: 6px;
+    flex: none;
+    background-color: currentColor;
+    transform: rotate(45deg);
+  }
+
+  /* A left-anchored version for section headings, where a centered rule across
+     a left-aligned column reads as a stray line. */
+  .rule-lead {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-brass-dark);
+  }
+
+  .on-dark .rule-lead {
+    color: var(--color-brass);
+  }
+
+  .rule-lead::after {
+    content: "";
+    width: 3rem;
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0.55;
+  }
+
+  /* 2. A hairline brass corner frame, inset from the edge of a dark full-bleed
+        section. Four corners, drawn with two pseudo-elements and a pair of
+        borders each, so it costs no extra elements in the markup.
+
+        `inset` rather than a full border: a complete rectangle around a
+        photograph reads as a picture frame in a hallway. Four corners read as
+        a set square, which is the institutional register this is after. */
+  .frame-brass {
+    position: relative;
+  }
+
+  .frame-brass::before,
+  .frame-brass::after {
+    content: "";
+    position: absolute;
+    width: clamp(2rem, 5vw, 4.5rem);
+    height: clamp(2rem, 5vw, 4.5rem);
+    border-color: var(--color-brass);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .frame-brass::before {
+    top: clamp(0.75rem, 2.2vw, 2rem);
+    left: clamp(0.75rem, 2.2vw, 2rem);
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+
+  .frame-brass::after {
+    bottom: clamp(0.75rem, 2.2vw, 2rem);
+    right: clamp(0.75rem, 2.2vw, 2rem);
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+  }
+
+  /* 3. A brass hairline along the top of a card. Used on the safety claims and
+        on an openings card that has space in it. */
+  .card-brass {
+    border-top: 2px solid var(--color-brass-dark);
+  }
+
+  .on-dark .card-brass {
+    border-top-color: var(--color-brass);
+  }
+
+  /* ------------------------------------------------------------------------
+     DARK SECTIONS
+
+     `.on-dark` was already the switch that repaints the focus ring; it now also
+     carries the ground, the text colour and the ornament tone, so a section
+     becomes dark by gaining one class rather than by restating six colours.
+     ------------------------------------------------------------------------ */
+  .on-ground {
+    background-color: var(--color-ground);
+    color: var(--color-on-ground);
+  }
+
+  /*
+    The two light grounds that do the work the dark ones used to.
+
+    A section needs to look different from the section above it. That does not
+    require a dark field, and reaching for one every time is how this page ended
+    up more than half dark. `sand` is warm, `tint` is cool, `bg` is neutral —
+    three light grounds is enough rhythm for nine sections.
+  */
+  .on-sand {
+    background-color: var(--color-sand);
+  }
+
+  .on-tint {
+    background-color: var(--color-brand-tint);
+  }
+
+  .on-deep {
+    background-color: var(--color-deep);
+    color: var(--color-on-ground);
+  }
+
+  /*
+    The escape hatch, and it earns its place: a light panel can open INSIDE a
+    dark one. The programs dropdown and the mobile menu are both white surfaces
+    rendered inside <header>, and the header is `.on-dark` on the home page —
+    so without this the dropdown inherits an off-white focus ring on a white
+    card (invisible) and a brass eyebrow at 2.3:1.
+
+    Declared after every `.on-dark` rule and at equal specificity, so a
+    `.on-dark … .on-light …` chain resolves to the light values on source
+    order. Put it on any light surface nested in a dark one.
+  */
+  .on-light :focus-visible {
+    outline-color: var(--color-accent);
+  }
+
+  .on-light .eyebrow {
+    color: var(--color-brass-dark);
+  }
+
+  .on-light .logomark {
+    --logomark-void: var(--color-bg);
+  }
+
+  .on-light .rule-diamond,
+  .on-light .rule-lead {
+    color: var(--color-brass-dark);
+  }
+
+  .on-light .card-brass {
+    border-top-color: var(--color-brass-dark);
+  }
+
+  /* ------------------------------------------------------------------------
+     DISPLAY TYPE
+
+     The old hero headline was 50px at 1280 and up, next to a 3.5rem body
+     measure. Every reference site opens at 70–90px. The gap between display
+     and body IS the effect — so display goes up and body stays exactly where
+     it is at 17/18px. Raising body to "balance" it would delete the effect and
+     cost the reading experience at the same time.
+
+     Two ranges rather than one, because the phone and the monitor want
+     different slopes. A single clamp wide enough to reach 104px at 1900 is
+     already past 60px at 400, which is four words a line on a phone.
+
+       mobile   36px at 320  ->  52px ceiling
+       desktop  56px floor   ->  104px at 1857 and above
+                              -> 96px at 1568, the width this is judged at
+
+     Leading 0.95 and tracking -0.02em: a serif at 90px set at the 1.15 leading
+     the h1–h4 rule uses looks like three unrelated lines, and set at 0 tracking
+     it falls apart into individual letters.
+     ------------------------------------------------------------------------ */
+  .display {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(2.25rem, 1.1rem + 5.9vw, 3.25rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .display {
+      font-size: clamp(3.25rem, 1.35rem + 3.6vw, 6rem);
+    }
+  }
+
+  /*
+    RESERVED LINE BOX — this is a CLS fix, not a typographic one.
+
+    The hero's content block is bottom-anchored inside the section, so anything
+    that changes the headline's height moves the headline, the sub-line and both
+    calls to action upward. Source Serif 4 arrives about 1.7s into a throttled
+    4G load, and its line breaks at 90px are not the metric-adjusted fallback's:
+    the block grew 422px -> 502px on swap and scored 0.256 CLS on its own. The
+    whole of a 0.27 CLS was this one element.
+
+    So the box is reserved at the line count the headline actually sets, which
+    is measured, not assumed: four lines, at every width from 390 to 2560, now
+    that the measure is 17ch rather than 22ch. `em` rather than `px` so it
+    tracks the clamp, and one value rather than two because there is no longer a
+    breakpoint where the count changes.
+
+    It is a `min-height`, so a longer headline still grows the box rather than
+    being clipped — it would also start shifting again, which is the trade a
+    re-skin makes if it changes this line. `npm run verify:perf` is what catches
+    that.
+  */
+  .display-reserve {
+    min-height: 3.8em;
+  }
+
+  /* One step down: section headings on the signature sections. */
+  .display-2 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 1.1rem + 3.2vw, 2.25rem);
+    line-height: 1.02;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .display-2 {
+      font-size: clamp(2.25rem, 1rem + 2.6vw, 3.5rem);
+    }
+  }
+
+  /*
+    The eyebrow. Every major section gets one, which is most of what makes nine
+    sections read as one system rather than nine decisions.
+
+    12px with 0.14em tracking, in brass. The colour is NOT set here — `.eyebrow`
+    is used on both grounds and brass is only legible on one of them, so the two
+    ground-specific variants below carry the colour and this rule carries the
+    shape.
+  */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-brass-dark);
+  }
+
+  /* On `ground` and `deep`, where the brighter brass clears 4.5:1. */
+  .on-dark .eyebrow,
+  .eyebrow-light {
+    color: var(--color-brass);
+  }
+
+  /*
+    The room switcher on "A day at Bridgewood" and the program pages.
+    A real radiogroup, styled with sibling selectors, so the whole thing needs
+    no client JavaScript and still works with JavaScript disabled.
+  */
+  .rooms-panels > [data-room] {
+    display: none;
+  }
+
+  /*
+    Both tab states are declared HERE, in the same layer.
+
+    They used to be split: the resting state came from Tailwind's `bg-surface`
+    utility on the element, the selected state from the `:checked ~` rule
+    below. Tailwind's `utilities` layer outranks `components`, so the utility
+    won in both states — the selected tab kept its white fill while this rule
+    still turned its label near-white. Measured contrast on the selected room:
+    1.06:1. The label was, in plain terms, invisible.
+  */
+  /*
+    Both tab states are declared HERE, in the same layer, and that is the whole
+    point of the rule. Split across a Tailwind utility and a `:checked ~`
+    selector, the utility wins in both states — which is how the selected tab
+    once kept a white fill while this rule turned its label near-white, at a
+    measured 1.06:1.
+  */
+  .rooms-tabs > label {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+  }
+
+  .rooms-tabs > label .rooms-age {
+    color: var(--color-muted);
+  }
+
+  .rooms > input:nth-of-type(1):checked ~ .rooms-panels > [data-room]:nth-of-type(1),
+  .rooms > input:nth-of-type(2):checked ~ .rooms-panels > [data-room]:nth-of-type(2),
+  .rooms > input:nth-of-type(3):checked ~ .rooms-panels > [data-room]:nth-of-type(3),
+  .rooms > input:nth-of-type(4):checked ~ .rooms-panels > [data-room]:nth-of-type(4),
+  .rooms > input:nth-of-type(5):checked ~ .rooms-panels > [data-room]:nth-of-type(5) {
+    display: block;
+  }
+
+  .rooms > input:nth-of-type(1):checked ~ .rooms-tabs > label:nth-of-type(1),
+  .rooms > input:nth-of-type(2):checked ~ .rooms-tabs > label:nth-of-type(2),
+  .rooms > input:nth-of-type(3):checked ~ .rooms-tabs > label:nth-of-type(3),
+  .rooms > input:nth-of-type(4):checked ~ .rooms-tabs > label:nth-of-type(4),
+  .rooms > input:nth-of-type(5):checked ~ .rooms-tabs > label:nth-of-type(5) {
+    background-color: var(--color-brand);
+    border-color: var(--color-brand);
+    color: var(--color-bg);
+  }
+
+  .rooms > input:nth-of-type(1):checked ~ .rooms-tabs > label:nth-of-type(1) .rooms-age,
+  .rooms > input:nth-of-type(2):checked ~ .rooms-tabs > label:nth-of-type(2) .rooms-age,
+  .rooms > input:nth-of-type(3):checked ~ .rooms-tabs > label:nth-of-type(3) .rooms-age,
+  .rooms > input:nth-of-type(4):checked ~ .rooms-tabs > label:nth-of-type(4) .rooms-age,
+  .rooms > input:nth-of-type(5):checked ~ .rooms-tabs > label:nth-of-type(5) .rooms-age {
+    color: color-mix(in srgb, var(--color-bg) 82%, transparent);
+  }
+
+  /* The inputs are visually hidden but still focusable — the ring goes on the
+     label the parent can actually see. */
+  .rooms > input:nth-of-type(1):focus-visible ~ .rooms-tabs > label:nth-of-type(1),
+  .rooms > input:nth-of-type(2):focus-visible ~ .rooms-tabs > label:nth-of-type(2),
+  .rooms > input:nth-of-type(3):focus-visible ~ .rooms-tabs > label:nth-of-type(3),
+  .rooms > input:nth-of-type(4):focus-visible ~ .rooms-tabs > label:nth-of-type(4),
+  .rooms > input:nth-of-type(5):focus-visible ~ .rooms-tabs > label:nth-of-type(5) {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* The skip link. Visible the moment it is focused, and not before. */
+  .skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: -100px;
+    z-index: 100;
+    background-color: var(--color-brand);
+    color: var(--color-on-primary);
+    padding: 0.875rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: top 150ms ease-out;
+  }
+
+  .skip-link:focus {
+    top: 0.75rem;
+  }
+}
+
+@layer utilities {
+  /*
+    The one motion idea on the site: fade and rise, 12px, 300ms, once.
+
+    The hidden state is gated behind `.js-reveal`, which the inline script in
+    app/layout.tsx puts on <html> — and only when JavaScript runs and the
+    visitor has not asked for reduced motion. The server-rendered HTML is
+    therefore fully opaque. No JavaScript means no hidden state, ever; a script
+    error before the class lands means no hidden state either. This is an
+    enhancement over readable content, not a gate in front of it.
+  */
+  @media (prefers-reduced-motion: no-preference) {
+    .js-reveal [data-reveal] {
+      opacity: 0;
+      transform: translateY(12px);
+      will-change: opacity, transform;
+    }
+
+    /* Deliberately not scoped to .js-reveal, so an element mid-transition when
+       the class is removed still animates to its resting state. */
+    [data-reveal].is-in {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 300ms ease-out,
+        transform 300ms ease-out;
+      will-change: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /*
+    A field that failed validation looks like one.
+
+    Before this, the only thing that changed on a rejected field was the
+    sentence underneath it: the border stayed the same `--color-line` as the
+    five fields that were fine. `aria-invalid` was already correct, so a screen
+    reader knew — a sighted parent scanning the form for what to fix did not.
+
+    Keyed off `aria-invalid` rather than a class, so the visual state and the
+    announced state are the same fact and cannot drift apart.
+
+    IN `utilities`, NOT `base`, and that is the whole reason this works. The
+    fields carry Tailwind's `border-line`, which is a utility; a rule in `base`
+    loses to it no matter how specific it is, because layer order beats
+    specificity. Written in `base` first, the inset shadow appeared and the
+    border colour silently did not — the same trap as the room tabs above.
+
+    The inset shadow doubles the apparent weight of the edge without adding a
+    pixel to the box, so an error appearing costs no layout shift. Terracotta
+    on white is 6.0:1, well past the 3:1 a non-text boundary needs, and it is
+    never the only signal — the message and `aria-describedby` both stay.
+  */
+  input[aria-invalid="true"],
+  select[aria-invalid="true"],
+  textarea[aria-invalid="true"] {
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 0 1px var(--color-accent);
+  }
+
+  /* Room for the sticky bottom action bar, plus the iPhone home indicator. */
+  .has-action-bar {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  @media (min-width: 1024px) {
+    .has-action-bar {
+      padding-bottom: 0;
+    }
+  }
+}

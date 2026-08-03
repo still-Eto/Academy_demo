@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" fill="none" role="img">
+  <rect width="1200" height="720" fill="#e4e8e3"/>
+  <line x1="0" y1="120" x2="1200" y2="120" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="0" y1="240" x2="1200" y2="240" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="0" y1="360" x2="1200" y2="360" stroke="#bbc8c1" stroke-width="14"/>
+  <line x1="0" y1="480" x2="1200" y2="480" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="0" y1="600" x2="1200" y2="600" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="150" y1="0" x2="150" y2="720" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="300" y1="0" x2="300" y2="720" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="450" y1="0" x2="450" y2="720" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="600" y1="0" x2="600" y2="720" stroke="#bbc8c1" stroke-width="14"/>
+  <line x1="750" y1="0" x2="750" y2="720" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="900" y1="0" x2="900" y2="720" stroke="#bbc8c1" stroke-width="6"/>
+  <line x1="1050" y1="0" x2="1050" y2="720" stroke="#bbc8c1" stroke-width="6"/>
+  <rect x="600" y="360" width="150" height="120" fill="#c8d3cc"/>
+  <path d="M600 282 c-26 0-46 20-46 46 0 33 46 74 46 74s46-41 46-74c0-26-20-46-46-46Z" fill="#B34426"/>
+  <circle cx="600" cy="328" r="17" fill="#FFFDF9"/>
+</svg>
