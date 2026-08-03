@@ -256,12 +256,7 @@ const rooms = {
   },
   "room.sunflower.1": {
     src: "/img/rooms/sunflower-1.svg",
-    photo: {
-      source: "toddler-with-wooden-toys.png",
-      widths: [400, 760, 1200],
-      crop: "attention",
-    },
-    alt: "A toddler at a round table reaching for a wooden toy truck",
+    alt: `A toddler at a round table in the ${named("sunflower")} room`,
     kind: "room" as const,
     ...landscape(),
   },
