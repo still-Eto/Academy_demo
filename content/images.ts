@@ -220,7 +220,7 @@ const hero = {
   hero: {
     src: "/img/hero-bridgewood.svg",
     photo: {
-      source: "teacher-reading-with-children.jpg",
+      source: "teacher-reading-with-children.png",
       widths: [960, 1280, 1600, 2000, 2560],
       /* "center", not "attention". The busiest region of this frame is the
          bookshelf behind the group; attention crops to it and cuts the
@@ -245,7 +245,7 @@ const hero = {
   "hero.mobile": {
     src: "/img/hero-bridgewood.svg",
     photo: {
-      source: "teacher-reading-with-children.jpg",
+      source: "teacher-reading-with-children.png",
       widths: [420, 640, 840, 1080],
       crop: "west",
     },
@@ -270,7 +270,7 @@ const bands = {
   "band.breath": {
     src: "/img/rooms/maple-2.svg",
     photo: {
-      source: "hands-blocks-warm-table.jpg",
+      source: "hands-blocks-warm-table.png",
       widths: [720, 1200, 1800, 2400],
       /* Portrait source, subject in the lower half: "attention" finds the hand
          and the stack. */
@@ -288,7 +288,7 @@ const bands = {
   "band.safety": {
     src: "/img/building/corridor.svg",
     photo: {
-      source: "empty-room-daylight.jpg",
+      source: "empty-room-daylight.png",
       widths: [720, 1200, 1800, 2400],
       /* The source is 16:9, so the 2:1 band is chosen on the vertical axis and
          only north/south/center move it. The top third is bare white wall and
@@ -303,7 +303,7 @@ const bands = {
   "band.closing": {
     src: "/img/building/playground.svg",
     photo: {
-      source: "playground-golden-hour.jpg",
+      source: "playground-golden-hour.png",
       widths: [720, 1200, 1800, 2400],
       crop: "center",
       tone: "low-key",
@@ -364,12 +364,7 @@ const rooms = {
   },
   "room.sunflower.1": {
     src: "/img/rooms/sunflower-1.svg",
-    photo: {
-      source: "toddler-with-wooden-toys.jpg",
-      widths: [400, 760, 1200],
-      crop: "attention",
-    },
-    alt: "A toddler at a round table reaching for a wooden toy truck",
+    alt: `A toddler at a round table in the ${named("sunflower")} room`,
     kind: "room" as const,
     ...landscape(),
   },
@@ -391,7 +386,7 @@ const rooms = {
   "room.maple.1": {
     src: "/img/rooms/maple-1.svg",
     photo: {
-      source: "girl-painting.jpg",
+      source: "girl-painting.png",
       widths: [400, 760, 1200],
       crop: "center",
     },
@@ -404,7 +399,7 @@ const rooms = {
     /* The warmth frame. The children in it read as two to four, which is this
        room, so it sits here rather than beside a quote from an infant parent. */
     photo: {
-      source: "teacher-on-the-floor-with-children.jpg",
+      source: "teacher-on-the-floor-with-children.png",
       widths: [400, 760, 1200],
       crop: "center",
     },
@@ -415,7 +410,7 @@ const rooms = {
   "room.oak.1": {
     src: "/img/rooms/oak-1.svg",
     photo: {
-      source: "child-cutting-with-help.jpg",
+      source: "child-cutting-with-help.png",
       widths: [400, 760, 1200],
       crop: "attention",
     },
@@ -430,7 +425,7 @@ const rooms = {
   "room.oak.2": {
     src: "/img/rooms/oak-2.svg",
     photo: {
-      source: "teacher-and-children-painting.jpg",
+      source: "teacher-and-children-painting.png",
       widths: [400, 760, 1200],
       crop: "attention",
     },
@@ -472,7 +467,7 @@ const rooms = {
   "room.after-school.1": {
     src: "/img/rooms/after-school-1.svg",
     photo: {
-      source: "children-cutting-paper.jpg",
+      source: "children-cutting-paper.png",
       widths: [400, 760, 1200],
       crop: "attention",
     },
@@ -509,7 +504,7 @@ const building = {
   "building.playground": {
     src: "/img/building/playground.svg",
     photo: {
-      source: "playground-golden-hour.jpg",
+      source: "playground-golden-hour.png",
       widths: [400, 760, 1200],
       crop: "center",
       tone: "low-key",
