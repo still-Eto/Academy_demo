@@ -132,7 +132,7 @@ export function OpeningsBlock({ headingId = "openings" }: { headingId?: string }
       >
         <span className="eyebrow">Updated {site.openingsUpdated}</span>
         <span className="mt-2 block">
-          We change this page the day a space opens or closes &mdash; if it says a space is there,
+          We change this page the day a space opens or closes. If it says a space is there,
           it is there.
         </span>
       </p>

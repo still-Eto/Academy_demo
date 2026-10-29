@@ -15,6 +15,8 @@
  * ============================================================================
  */
 
+import { openingsMonth } from "@/lib/openings-dates";
+
 export type Accreditation = {
   /** Rendered as text, never as a logo linking to "#". */
   label: string;
@@ -126,8 +128,14 @@ export const site = {
     door: "Use the front door under the green awning. The playground-side door is exit-only and alarmed.",
   },
 
-  /** The month stamped on the openings block. Recency is itself a trust signal. */
-  openingsUpdated: "August 2026",
+  /**
+   * The month stamped on the openings block. Recency is itself a trust signal,
+   * so it is the month of the day the page is rendered (lib/openings-dates.ts),
+   * never a typed-in month that goes stale.
+   */
+  get openingsUpdated() {
+    return openingsMonth();
+  },
 
   media: {
     hero: {

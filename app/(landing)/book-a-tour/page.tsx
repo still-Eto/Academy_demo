@@ -1,5 +1,6 @@
 import { ManagedAvatar } from "@/components/managed-image";
 import { directorImage } from "@/content/images";
+import { season } from "@/lib/openings-dates";
 import type { Metadata } from "next";
 
 import { Check } from "@/components/icons";
@@ -80,11 +81,11 @@ export default async function BookATourPage({
               two lengths — not two headings. */}
           <p className="measure mt-3 text-[1.0625rem] leading-relaxed text-muted lg:mt-4 lg:text-[1.1875rem]">
             <span className="lg:hidden">
-              45 minutes. {dayProgramSpaces} spaces open across the day program this fall.
+              45 minutes. {dayProgramSpaces} spaces open across the day program this {season()}.
             </span>
             <span className="hidden lg:inline">
               45 minutes, during nap or during play &mdash; you choose which.{" "}
-              {dayProgramSpaces} spaces are open across the day program this fall.
+              {dayProgramSpaces} spaces are open across the day program this {season()}.
             </span>
           </p>
         </div>

@@ -7,6 +7,8 @@
  * FAQPage JSON-LD.
  */
 
+import { nextOpeningDate, openingsMonth, programYear } from "@/lib/openings-dates";
+
 export type Faq = { q: string; a: string[] };
 
 export const closedHolidays = [
@@ -24,11 +26,14 @@ export const closedHolidays = [
 export const faqs: Faq[] = [
   {
     q: "How long is the waitlist?",
-    a: [
-      "It depends entirely on the room, so we publish it by room on the home page and update it monthly.",
-      "As of August 2026: the Acorn Room (6 weeks–15 months) is full with about a six-week wait. The Sunflower Room (15–24 months) has two spaces from September 8. The Maple Room (2–3 years) has one space now, the Oak Room (3–4 years) has four, and the After-School Club (5–10 years) has six. The Summit Room (4–5 years) is full for 2026–27.",
-      "There is no charge to sit on a waitlist and no deposit to hold a place on it. We call in the order people joined, and we tell you your position when you ask.",
-    ],
+    // The month and the dates come from the day the page is rendered.
+    get a() {
+      return [
+        "It depends entirely on the room, so we publish it by room on the home page and update it monthly.",
+        `As of ${openingsMonth()}: the Acorn Room (6 weeks–15 months) is full with about a six-week wait. The Sunflower Room (15–24 months) has two spaces from ${nextOpeningDate()}. The Maple Room (2–3 years) has one space now, the Oak Room (3–4 years) has four, and the After-School Club (5–10 years) has six. The Summit Room (4–5 years) is full for ${programYear()}.`,
+        "There is no charge to sit on a waitlist and no deposit to hold a place on it. We call in the order people joined, and we tell you your position when you ask.",
+      ];
+    },
   },
   {
     q: "Does my child have to be toilet trained?",

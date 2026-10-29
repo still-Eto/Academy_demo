@@ -81,7 +81,8 @@ export const organizationLd = {
   })),
 };
 
-export const faqLd = {
+/** A function, so the answers with dates are read on the day the page is rendered. */
+export const faqLd = () => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: faqs.map((f) => ({
@@ -92,7 +93,7 @@ export const faqLd = {
       text: f.a.join(" "),
     },
   })),
-};
+});
 
 export function breadcrumbLd(trail: { name: string; path: string }[]) {
   return {

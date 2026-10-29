@@ -28,7 +28,7 @@ export function AvailabilityChip({ availability }: { availability: Availability 
   );
 }
 
-/** The long form, e.g. "2 spaces from September 8" or "Waitlist — about 6 weeks". */
+/** The long form, e.g. "2 spaces from November 2" or "Waitlist, about 6 weeks". */
 export function AvailabilityText({ availability }: { availability: Availability }) {
   return <>{availabilityWords(availability)}</>;
 }

@@ -29,6 +29,7 @@ import type { SafetyClaimIcon } from "@/content/safety";
 import { afterSchoolSpaces, dayProgramSpaces, programs } from "@/content/programs";
 import { homeSafetyClaims } from "@/content/safety";
 import { homeTitle, mapsHref, site } from "@/content/site.config";
+import { season } from "@/lib/openings-dates";
 import { featuredStaff, leadTeacherAverageTenure } from "@/content/staff";
 import { homeTestimonials } from "@/content/testimonials";
 import { programs as allPrograms } from "@/content/programs";
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     middle of it.
   */
   title: { absolute: homeTitle },
-  description: `Licensed early learning in ${site.address.city}. 1:3 infant ratio against an Illinois minimum of 1:4. ${dayProgramSpaces} day-program spaces open this fall, listed by room. Open ${site.hours.short}.`,
+  description: `Licensed early learning in ${site.address.city}. 1:3 infant ratio against an Illinois minimum of 1:4. ${dayProgramSpaces} open day-program spaces, listed by room. Open ${site.hours.short}.`,
   alternates: { canonical: "/" },
 };
 
@@ -161,9 +162,9 @@ export default function HomePage() {
           <p className="measure mt-3.5 text-[1.0625rem] leading-[1.5] text-bg/85 lg:mt-4 lg:text-[1.1875rem]">
             Six weeks to kindergarten, plus after-school care to age 10.{" "}
             <strong className="font-semibold text-bg">
-              {dayProgramSpaces} spaces open this fall
-            </strong>{" "}
-            — we list them by room below.
+              {dayProgramSpaces} spaces open this {season()}
+            </strong>
+            , listed by room below.
           </p>
 
           {/*

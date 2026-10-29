@@ -24,6 +24,11 @@ const body = Source_Sans_3({
   weight: ["400", "600", "700"],
 });
 
+// Rendered again at most every hour, so the openings month, the next opening
+// day and the season in the copy (lib/openings-dates.ts) are current in the
+// HTML itself.
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
@@ -45,7 +50,7 @@ export const metadata: Metadata = {
     siteName: site.name,
     url: site.url,
     title: `${site.name} — ${site.tagline}`,
-    description: `1:3 infant ratio, licensed #${site.license.number}, NAEYC accredited. Openings listed by room, updated ${site.openingsUpdated}.`,
+    description: `1:3 infant ratio, licensed #${site.license.number}, NAEYC accredited. Openings listed by room and updated monthly.`,
   },
   twitter: { card: "summary_large_image" },
   robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },

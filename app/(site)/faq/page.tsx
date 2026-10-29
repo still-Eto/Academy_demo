@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function FaqPage() {
   return (
     <>
-      <JsonLd data={faqLd} />
+      <JsonLd data={faqLd()} />
 
       <PageHero
         eyebrow="Questions"

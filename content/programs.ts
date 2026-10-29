@@ -13,6 +13,7 @@
 
 import { roomPhotos, type ManagedImage } from "./images";
 import { roomNames } from "./rooms";
+import { nextOpeningDate, programYear } from "@/lib/openings-dates";
 
 export type Availability =
   | { kind: "open"; spaces: number }
@@ -122,7 +123,13 @@ export const programs: Program[] = [
     hours: "6:30am – 6:00pm",
     rate5: 475,
     rate3: 335,
-    availability: { kind: "opening", spaces: 2, from: "September 8" },
+    availability: {
+      kind: "opening",
+      spaces: 2,
+      get from() {
+        return nextOpeningDate();
+      },
+    },
     oneLiner:
       "Eight toddlers, two teachers, and ninety minutes outside every day in two doses.",
     intro:
@@ -277,7 +284,12 @@ export const programs: Program[] = [
     hours: "6:30am – 6:00pm",
     rate5: 365,
     rate3: 255,
-    availability: { kind: "waitlist", note: "full for 2026–27" },
+    availability: {
+      kind: "waitlist",
+      get note() {
+        return `full for ${programYear()}`;
+      },
+    },
     oneLiner:
       "Eighteen children, two teachers, and a one-page kindergarten readiness sheet sent home every April.",
     intro:
@@ -390,7 +402,7 @@ export const availabilityWords = (a: Availability) => {
     case "opening":
       return `${a.spaces} ${a.spaces === 1 ? "space" : "spaces"} from ${a.from}`;
     case "waitlist":
-      return `Waitlist — ${a.note}`;
+      return `Waitlist, ${a.note}`;
   }
 };
 
