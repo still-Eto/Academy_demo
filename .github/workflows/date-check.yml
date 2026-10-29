@@ -1,0 +1,26 @@
+# Date check of the demo: fails as soon as the openings stamp, the next
+# opening day or a typed-in month could go stale (scripts/check-dates.mts).
+# Runs on every push and early every morning; GitHub mails when it fails.
+# Free, no secrets, no install. Schedules only start from the default branch.
+name: Date check
+
+on:
+  push:
+  schedule:
+    - cron: "29 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Look for stale dates
+        run: node --no-warnings scripts/check-dates.mts
