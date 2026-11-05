@@ -18,17 +18,22 @@ import { TourConfirmation } from "./tour-confirmation";
  *   5. Preferred tour day — one field, a native date control plus a
  *      morning/afternoon choice, grouped in a single labelled fieldset.
  *
- * With JavaScript off this is an ordinary form that POSTs to /api/tour, which
- * validates with this same schema and redirects to the same confirmation.
+ * Nothing leaves the browser (05.11.2026, still-Eto/ertukara#59). The form
+ * validates against the schema and renders the confirmation in place; there is
+ * no endpoint, no fetch and no log. ertukara.com's privacy policy says the demo
+ * forms transmit nothing, and the line under this form says nothing is saved.
+ *
+ * method="dialog" keeps that true without JavaScript: outside a <dialog> the
+ * browser does nothing on submit, so no request and no query string ever
+ * carries what a parent typed. A real center's deployment adds its own
+ * endpoint, set up for that center's privacy policy.
  */
-export function TourForm({ defaults }: { defaults?: Partial<TourInput> }) {
+export function TourForm() {
   const [sent, setSent] = useState<TourInput | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
   /**
-   * Marks the moment the form stops being a plain HTML form and starts
-   * intercepting its own submit. Before this, a submit is a real POST to
-   * /api/tour and still lands on a real confirmation — which is the point of
-   * the progressive enhancement, and what the verification suite waits for.
+   * Marks the moment the form starts handling its own submit, which is what
+   * the verification suite waits for. Before it, pressing the button does
+   * nothing (method="dialog", see above).
    *
    * useSyncExternalStore rather than an effect: it reads false on the server
    * and true on the client with no extra render pass.
@@ -45,17 +50,15 @@ export function TourForm({ defaults }: { defaults?: Partial<TourInput> }) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm<TourInput>({
     resolver: zodResolver(tourSchema),
     mode: "onTouched",
     defaultValues: {
-      name: defaults?.name ?? "",
-      phone: defaults?.phone ?? "",
-      email: defaults?.email ?? "",
-      childAge: defaults?.childAge ?? "",
-      tourDate: defaults?.tourDate ?? "",
-      tourSlot: defaults?.tourSlot,
+      name: "",
+      phone: "",
+      email: "",
+      childAge: "",
+      tourDate: "",
     },
   });
 
@@ -64,39 +67,8 @@ export function TourForm({ defaults }: { defaults?: Partial<TourInput> }) {
     if (sent) window.scrollTo({ top: 0, behavior: "auto" });
   }, [sent]);
 
-  const onSubmit = handleSubmit(async (values) => {
-    setFormError(null);
-    try {
-      const res = await fetch("/api/tour", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.ok) {
-        const serverErrors: Record<string, string> = data?.errors ?? {};
-        let matched = false;
-        for (const [field, message] of Object.entries(serverErrors)) {
-          if (field === "form") continue;
-          setError(field as keyof TourInput, { message });
-          matched = true;
-        }
-        if (!matched) {
-          setFormError(
-            serverErrors.form ??
-              "Something went wrong on our end. Please call us on the number above and we'll book it by phone.",
-          );
-        }
-        return;
-      }
-
-      setSent(values);
-    } catch {
-      setFormError(
-        "We couldn't reach the server. Please call us on the number above and we'll book it by phone.",
-      );
-    }
+  const onSubmit = handleSubmit((values) => {
+    setSent(values);
   });
 
   if (sent) {
@@ -110,8 +82,7 @@ export function TourForm({ defaults }: { defaults?: Partial<TourInput> }) {
 
   return (
     <form
-      method="POST"
-      action="/api/tour"
+      method="dialog"
       onSubmit={onSubmit}
       noValidate
       data-hydrated={hydrated ? "true" : "false"}
@@ -121,12 +92,6 @@ export function TourForm({ defaults }: { defaults?: Partial<TourInput> }) {
       <p className="mt-2 text-[0.9375rem] leading-relaxed text-muted">
         Five questions. We ask everything else when you are standing in the room.
       </p>
-
-      {formError && (
-        <p role="alert" className="mt-5 rounded-lg bg-wait-bg px-4 py-3 text-[0.9375rem] text-wait">
-          {formError}
-        </p>
-      )}
 
       <div className="mt-6 space-y-5">
         {/* 1 — Parent name */}
@@ -208,7 +173,7 @@ export function TourForm({ defaults }: { defaults?: Partial<TourInput> }) {
             aria-invalid={errors.childAge ? "true" : undefined}
             aria-describedby={errors.childAge ? `${uid}-age-error` : undefined}
             className={fieldClass}
-            defaultValue={defaults?.childAge ?? ""}
+            defaultValue=""
           >
             <option value="">Choose an age</option>
             {ageOptions.map((o) => (
@@ -282,7 +247,7 @@ export function TourForm({ defaults }: { defaults?: Partial<TourInput> }) {
       </div>
 
       <button type="submit" disabled={isSubmitting} className="btn btn-primary mt-7 w-full">
-        {isSubmitting ? "Sending…" : "Ask Marisol for a tour"}
+        Ask Marisol for a tour
       </button>
 
       <p className="mt-3 text-[0.875rem] leading-relaxed text-muted">
@@ -290,24 +255,27 @@ export function TourForm({ defaults }: { defaults?: Partial<TourInput> }) {
       </p>
 
       {/*
-        What happens to the three pieces of personal data this form collects.
+        What happens to the three pieces of personal data this form asks for,
+        said at the point they are asked, which is worth more than a policy
+        page nobody opens.
 
-        The form does a real POST to a real endpoint, so "what do you do with
-        my phone number" is a fair question and there was nowhere on the site
-        that answered it. This is the answer, at the point it is asked, which
-        is worth more than a policy page nobody opens.
-
-        The wording follows the deployment. On a demo `/api/tour` validates the
-        submission and writes it to the server log — no database, no email, no
-        third party — and saying so is both true and reassuring. On a real
-        center's deployment that endpoint becomes their CRM, so the line states
-        the purpose instead and the center adds a policy page beside it.
+        On a demo the answer is nothing, and since 05.11.2026 that is literally
+        true: no endpoint, no log, nothing leaves the browser (#59). On a real
+        center's deployment the line states the purpose instead, and the center
+        adds its endpoint and a policy page beside it.
       */}
       <p className="mt-2 text-[0.875rem] leading-relaxed text-muted">
         {noIndex
           ? "This is a demonstration site. What you type here is not saved, emailed or passed to anyone."
           : "We use your name, phone and email to arrange the tour and reply to you, and for nothing else."}
       </p>
+      {noIndex && (
+        <noscript>
+          <p className="mt-2 text-[0.875rem] leading-relaxed text-muted">
+            With JavaScript turned off, the button does nothing and nothing is sent.
+          </p>
+        </noscript>
+      )}
     </form>
   );
 }

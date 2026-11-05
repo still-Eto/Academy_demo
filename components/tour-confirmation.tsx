@@ -13,8 +13,8 @@ import { Check } from "./icons";
  * It names the day, the slot and the person who will reply, and tells her how
  * to change it. Never "Thanks, we'll be in touch."
  *
- * Shared by both paths: the client renders it in place after a fetch, and the
- * no-JavaScript redirect renders exactly the same thing server-side.
+ * The form renders it in place once the fields validate. Nothing is sent
+ * anywhere (still-Eto/ertukara#59).
  */
 export function TourConfirmation({
   name,

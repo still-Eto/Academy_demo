@@ -3,9 +3,9 @@ import { z } from "zod";
 import { programs } from "@/content/programs";
 
 /**
- * One schema, used by the client form and by app/api/tour/route.ts. A rule
- * that exists in only one of those two places is a rule that will disagree
- * with itself eventually.
+ * One schema for the tour form. It used to be shared with app/api/tour/route.ts;
+ * since 05.11.2026 the form sends nothing (still-Eto/ertukara#59), so the
+ * browser is the only place it runs.
  *
  * Five fields, and only five. Everything else is asked at the tour.
  */

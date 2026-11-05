@@ -5,8 +5,9 @@
  *
  * Starts `next start`, drives a real Chromium, screenshots every page at
  * 390x844 and 1440x900, and answers the assertions that only a real viewport
- * can answer: folds, tap targets, keyboard, hover-less operation, no-JS form
- * submission, horizontal overflow at 320px and first-load JS.
+ * can answer: folds, tap targets, keyboard, hover-less operation, a tour form
+ * that sends nothing with or without JS, horizontal overflow at 320px and
+ * first-load JS.
  *
  * Screenshots land in /verification.
  */
@@ -105,6 +106,14 @@ const phone = await browser.newContext({
 });
 const desktop = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 
+/* Every load fetches from the server, like a first visit. Next.js prefetches
+   the RSC payload of every link in view; when a second page in the same
+   context asks for those URLs again, Chromium's HTTP cache holds them pending
+   and "networkidle" never comes. Reproduced on the unchanged code on
+   05.11.2026 (still-Eto/ertukara#59). Routing every request turns the HTTP
+   cache off for the context. */
+for (const ctx of [phone, desktop]) await ctx.route("**/*", (route) => route.continue());
+
 /*
   Screenshots live in scripts/screenshots.mjs, which emulates reduced motion so
   the scroll-reveal does not leave below-the-fold sections at opacity 0 in a
@@ -181,7 +190,7 @@ record(
         // /book-a-tour IS the booking page — the form is the reachable action.
         const isBookingPage = route === "/book-a-tour";
         const formVisible = isBookingPage
-          ? await page.evaluate(() => !!document.querySelector('form[action="/api/tour"]'))
+          ? await page.evaluate(() => !!document.querySelector("form[data-hydrated]"))
           : false;
 
         if (!reachable && !(isBookingPage && formVisible)) {
@@ -283,8 +292,8 @@ record(
 {
   const page = await phone.newPage();
   await page.goto(BASE + "/book-a-tour", { waitUntil: "networkidle" });
-  /* Wait for the form to take over its own submit. Before this it is a plain
-     HTML form that POSTs — correct behaviour, but not what item 7 asserts. */
+  /* Wait for the form to take over its own submit. Before this the button does
+     nothing (method="dialog"), which is not what item 7 asserts. */
   await page.waitForSelector('form[data-hydrated="true"]', { timeout: 15_000 });
 
   const counts = await page.evaluate(() => ({
@@ -321,6 +330,15 @@ record(
   await page.locator('label:has-text("Morning")').click();
   await page.waitForTimeout(150);
 
+  /* Nothing may leave the browser (still-Eto/ertukara#59): after the click,
+     no request other than a plain GET, and none that carries what was typed. */
+  const typed = ["Danielle", "danielle", "5550114", "example.com"];
+  const sentJs = [];
+  page.on("request", (r) => {
+    const carries = typed.some((v) => r.url().includes(v) || (r.postData() ?? "").includes(v));
+    if (r.method() !== "GET" || carries) sentJs.push(`${r.method()} ${r.url()}`);
+  });
+
   const urlBefore = page.url();
   await page.click('button[type="submit"]');
 
@@ -344,13 +362,15 @@ record(
 
   const jsOk =
     urlBefore === urlAfter &&
+    sentJs.length === 0 &&
     confirmation.includes("Danielle") &&
     confirmation.includes(expectedDay) &&
     /Marisol Vega/.test(confirmation);
 
   await page.close();
 
-  // --- without JavaScript: plain POST, real confirmation page
+  // --- without JavaScript: the button does nothing, nothing is sent, and the
+  // noscript line says so (still-Eto/ertukara#59)
   const noJs = await browser.newContext({
     viewport: { width: 390, height: 844 },
     javaScriptEnabled: false,
@@ -360,26 +380,36 @@ record(
   });
   const page2 = await noJs.newPage();
   await page2.goto(BASE + "/book-a-tour", { waitUntil: "networkidle" });
+  const noJsUrlBefore = page2.url();
   await page2.fill('input[name="name"]', "Marcus Tolliver");
   await page2.fill('input[name="phone"]', "6305550188");
   await page2.fill('input[name="email"]', "marcus@example.com");
   await page2.selectOption('select[name="childAge"]', "acorn");
   await page2.fill('input[name="tourDate"]', iso);
   await page2.locator('label:has-text("Afternoon")').click();
+  const sentNoJs = [];
+  page2.on("request", (r) => sentNoJs.push(`${r.method()} ${r.url()}`));
   await page2.click('button[type="submit"]');
-  await page2.waitForLoadState("domcontentloaded");
+  await page2.waitForTimeout(1500);
 
   const noJsText = await page2.evaluate(() => document.body.innerText);
-  const noJsOk =
-    /Marcus/.test(noJsText) && noJsText.includes(expectedDay) && /Marisol Vega/.test(noJsText);
   const noJsUrl = page2.url();
+  /* The noscript line belongs to the demo build (NEXT_PUBLIC_NOINDEX=true,
+     as on Vercel); a real center's build states its purpose instead. */
+  const isDemo = await page2.evaluate(() => !!document.querySelector('meta[name="robots"][content*="noindex"]'));
+  const noscriptOk = !isDemo || /nothing is sent/.test(noJsText);
+  const noJsOk =
+    noJsUrl === noJsUrlBefore &&
+    sentNoJs.length === 0 &&
+    !/Marcus/.test(noJsText) &&
+    noscriptOk;
   await noJs.close();
 
   record(
     7,
-    "Submitting renders a named, specific confirmation in place, and the form works with JavaScript disabled",
+    "Submitting renders a named, specific confirmation in place and sends nothing, with or without JavaScript",
     jsOk && noJsOk,
-    `with JS: URL unchanged (${urlBefore === urlAfter}), confirmation names the parent, "${expectedDay}" and Marisol Vega.\n      without JS: plain POST to /api/tour redirects to ${noJsUrl.replace(BASE, "")} and renders the identical confirmation (${noJsOk}).`,
+    `with JS: URL unchanged (${urlBefore === urlAfter}), requests carrying the entries: ${sentJs.length}, confirmation names the parent, "${expectedDay}" and Marisol Vega.\n      without JS: URL unchanged (${noJsUrl === noJsUrlBefore}), requests after the click: ${sentNoJs.length}, ${isDemo ? `the noscript line says nothing is sent (${noscriptOk})` : "not a demo build, so no noscript line is expected"}.`,
   );
 }
 

@@ -4,7 +4,6 @@ import { season } from "@/lib/openings-dates";
 import type { Metadata } from "next";
 
 import { Check } from "@/components/icons";
-import { TourConfirmation } from "@/components/tour-confirmation";
 import { TourForm } from "@/components/tour-form";
 import { dayProgramSpaces, programs } from "@/content/programs";
 import { site } from "@/content/site.config";
@@ -31,24 +30,11 @@ const STEPS = [
   },
 ];
 
-export default async function BookATourPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const params = await searchParams;
-  const first = (key: string) => {
-    const value = params[key];
-    return Array.isArray(value) ? value[0] : value;
-  };
-
-  /* The no-JavaScript path posts to /api/tour, which validates and redirects
-     back here. Both paths render exactly the same confirmation. */
-  const booked = first("booked") === "1";
-  const bookedName = first("name") ?? "";
-  const bookedDate = first("tourDate") ?? "";
-  const bookedSlot = first("tourSlot") ?? "morning";
-
+/* Nothing on this page reads the address bar any more. Until 05.11.2026 a
+   no-JavaScript submit went to /api/tour, which redirected back here with
+   every entry in the query string; the form now sends nothing and renders its
+   confirmation in place (still-Eto/ertukara#59), so the page is static. */
+export default function BookATourPage() {
   return (
     <section className="shell py-10 lg:py-16">
       {/*
@@ -90,11 +76,8 @@ export default async function BookATourPage({
           </p>
         </div>
 
-        {/* ---------------- 2. The form, or the confirmation ---------------- */}
+        {/* ---------------- 2. The form (it turns into the confirmation in place) ---------------- */}
         <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2">
-          {booked && bookedDate ? (
-            <TourConfirmation name={bookedName} tourDate={bookedDate} tourSlot={bookedSlot} />
-          ) : (
             <>
               <div className="mb-6 lg:hidden">
                 {/*
@@ -121,17 +104,8 @@ export default async function BookATourPage({
                   </div>
                 </div>
               </div>
-              <TourForm
-                defaults={{
-                  name: first("name"),
-                  phone: first("phone"),
-                  email: first("email"),
-                  childAge: first("childAge"),
-                  tourDate: first("tourDate"),
-                }}
-              />
+              <TourForm />
             </>
-          )}
         </div>
 
         {/* ---------------- 3. What happens next, and who replies ---------------- */}
