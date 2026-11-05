@@ -18,6 +18,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium, devices } from "playwright";
 
+import { nextOpeningDate } from "../lib/openings-dates.ts";
+
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const shots = join(root, "verification");
 const PORT = Number(process.env.PORT ?? 3210);
@@ -212,7 +214,7 @@ record(
 }
 
 /* ===================================================================== */
-/* 3, 4 — the ratio and the September question, answered without a form  */
+/* 3, 4 — the ratio and the next-month question, without a form  */
 /* ===================================================================== */
 {
   const page = await phone.newPage();
@@ -250,15 +252,28 @@ record(
   );
 
   const bodyText = await page.evaluate(() => document.body.innerText);
+  /* The openings date is worked out from today (lib/openings-dates.ts, since
+     still-Eto/ertukara#25), so the check asks the same function the page uses
+     instead of a typed-in "September 8" (still-Eto/ertukara#60). The sentence
+     is the room card's screen-reader line, e.g. "2 spaces from December 7".
+     Run right after a build: across a month boundary the prerendered page and
+     this check can disagree until the hourly revalidation. */
+  const expectedFrom = nextOpeningDate();
+  const sunflowerText = await page.evaluate(() => {
+    const heading = [...document.querySelectorAll("h3")].find((h) => h.textContent?.trim() === "Sunflower Room");
+    let card = heading?.parentElement ?? null;
+    while (card && !card.querySelector(".sr-only")) card = card.parentElement;
+    return card?.querySelector(".sr-only")?.textContent?.trim() ?? "";
+  });
   const sunflowerAnswered =
-    /Sunflower Room/.test(bodyText) && /15\s*[–-]\s*24 months/.test(bodyText) && /September 8/.test(bodyText);
+    /Sunflower Room/.test(bodyText) && /15\s*[–-]\s*24 months/.test(bodyText) && sunflowerText.endsWith(`from ${expectedFrom}`);
   const formsOnHome = await page.evaluate(() => document.querySelectorAll("form").length);
 
   record(
     4,
-    "Whether a 14-month-old has a place in September is answerable without submitting anything",
+    "Whether a 14-month-old has a place next month is answerable without submitting anything",
     sunflowerAnswered && formsOnHome === 0,
-    `home page states "Sunflower Room · 15 – 24 months · 2 spaces from September 8" in the openings block; forms on the home page: ${formsOnHome}. A 14-month-old is in the Acorn Room (6 weeks–15 months), shown as "Waitlist — about 6 weeks", and moves to Sunflower at 15 months.`,
+    `home page states "Sunflower Room · 15 – 24 months · ${sunflowerText || "(no Sunflower line found)"}" in the openings block, expected "from ${expectedFrom}" (lib/openings-dates.ts, today in Elmhurst); forms on the home page: ${formsOnHome}. A 14-month-old is in the Acorn Room (6 weeks–15 months) and moves to Sunflower at 15 months.`,
   );
   await page.close();
 }
