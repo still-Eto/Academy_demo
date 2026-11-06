@@ -94,7 +94,7 @@ export const site = {
         "The National Association for the Education of Young Children re-accredits us every five years against 10 program standards.",
     },
     {
-      label: "ExceleRate Illinois — Gold Circle of Quality",
+      label: "ExceleRate Illinois Gold Circle of Quality",
       href: "https://www.excelerateillinois.com/",
       detail:
         "Gold is the top of the four Illinois quality circles. It is the only one that is assessed on group size and ratios by an independent assessor.",
@@ -110,7 +110,7 @@ export const site = {
     email: "marisol@bridgewoodacademy.com",
     /** The response promise. Shown on /book-a-tour and /contact. */
     responsePromise:
-      "Marisol replies within one business day — a real reply, not an auto-response.",
+      "Marisol replies within one business day, and it is a real reply, not an auto-response.",
     /* Her portrait lives in content/images.ts like every other image, as
        `directorImage`. Nothing outside that file names a path under /public. */
   },

@@ -66,7 +66,7 @@ export const organizationLd = {
   },
   makesOffer: programs.map((p) => ({
     "@type": "Offer",
-    name: `${p.label} — ${p.ages}`,
+    name: `${p.label}: ${p.ages}`,
     priceSpecification: {
       "@type": "UnitPriceSpecification",
       price: p.rate5,

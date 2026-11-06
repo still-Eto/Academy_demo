@@ -9,7 +9,7 @@ import { groupLabels, leadTeacherAverageTenure, staff, staffByGroup } from "@/co
 
 export const metadata: Metadata = {
   title: "Meet the teachers",
-  description: `Everyone who works at ${site.name}, by room — name, credential, years here and one sentence in their own voice. Including Rosa, who cooks every meal.`,
+  description: `Everyone who works at ${site.name}, by room: name, credential, years here and one sentence in their own voice. Including Rosa, who cooks every meal.`,
   alternates: { canonical: "/staff" },
 };
 
@@ -42,7 +42,7 @@ export default function StaffPage() {
               the `verify` check that now scans the built output for it.
             */}
             {staff.length}{" "}
-            people, and this is all of them &mdash; including Rosa, who cooks every meal, and Ellen,
+            people, and this is all of them, including Rosa, who cooks every meal, and Ellen,
             who will fix your bill. Our six lead teachers have been here an average of{" "}
             {leadTeacherAverageTenure} years. Tenure is the number worth asking about at every
             center you tour.

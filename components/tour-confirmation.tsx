@@ -41,19 +41,19 @@ export function TourConfirmation({
         You asked for{" "}
         <strong className="font-semibold">
           {formatTourDate(tourDate)}, {tourSlot === "morning" ? "morning" : "afternoon"}
-        </strong>{" "}
-        &mdash; {slotLabel(tourSlot)}.
+        </strong>
+        : {slotLabel(tourSlot)}.
       </p>
 
       <div className="mt-6 flex items-start gap-4 rounded-[10px] bg-brand-tint p-4">
         <ManagedAvatar image={directorImage} size={56} />
         <p className="text-[0.9375rem] leading-relaxed">
-          <strong className="font-semibold">{site.director.name}</strong>, {site.director.role} &mdash;{" "}
+          <strong className="font-semibold">{site.director.name}</strong>, {site.director.role},{" "}
           {/* Explicit `{" "}` — see the note on /staff. This one shipped as
               "12years here" in the message a parent reads immediately after
               handing over their phone number. */}
           {site.director.tenureYears}{" "}
-          years here &mdash; will email you within one business day to confirm the exact time. She
+          years here, will email you within one business day to confirm the exact time. She
           writes those herself.
         </p>
       </div>
@@ -66,7 +66,7 @@ export function TourConfirmation({
             {site.phone.display}
           </a>{" "}
           any weekday between {site.hours.short}. There is nothing to cancel formally and no
-          deposit &mdash; a tour costs you nothing but the 45 minutes.
+          deposit. A tour costs you nothing but the 45 minutes.
         </p>
       </div>
 

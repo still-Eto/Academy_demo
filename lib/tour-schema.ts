@@ -21,7 +21,7 @@ export const ageOptions = [
   { value: "expecting", label: "Not born yet" },
   ...programs.map((p) => ({
     value: p.slug,
-    label: `${p.ages} — ${p.label}`,
+    label: `${p.ages} · ${p.label}`,
   })),
 ];
 
@@ -35,7 +35,7 @@ export const tourSchema = z.object({
     .string()
     .trim()
     .min(2, { message: "Please tell us your name so we know who we're writing back to." })
-    .max(80, { message: "That's longer than we can store — please shorten it." }),
+    .max(80, { message: "That's longer than we can store. Please shorten it." }),
 
   phone: z
     .string()
@@ -50,7 +50,7 @@ export const tourSchema = z.object({
     .trim()
     .min(1, { message: "We need an email address to send you the confirmation." })
     .refine((v) => EMAIL.test(v), {
-      message: "Please check that address — it's missing an @ or the part after the dot.",
+      message: "Please check that address. It's missing an @ or the part after the dot.",
     }),
 
   childAge: z
@@ -81,7 +81,7 @@ export const tourSchema = z.object({
     ),
 
   tourSlot: z.enum(["morning", "afternoon"], {
-    message: "Morning or afternoon — whichever suits you.",
+    message: "Morning or afternoon, whichever suits you.",
   }),
 });
 

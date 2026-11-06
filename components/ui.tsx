@@ -405,7 +405,7 @@ export function TourPromise() {
   return (
     <p className="measure text-[1.0625rem] leading-relaxed">
       45 minutes. You&rsquo;ll meet the teacher your child would actually have. Come during nap or
-      during play &mdash; tell us which, and {site.director.firstName} will set it up.
+      during play, tell us which, and {site.director.firstName} will set it up.
     </p>
   );
 }
@@ -436,7 +436,7 @@ export function ClosingCta() {
           <h2 className="display-2">Come and see the room your child would be in.</h2>
           <p className="mt-4 text-[1.0625rem] leading-snug text-bg/85 lg:mt-6 lg:text-[1.125rem] lg:leading-relaxed">
             45 minutes. You&rsquo;ll meet the teacher your child would actually have, stand in the
-            room, and read the drill log on the wall. Come during nap or during play &mdash; tell us
+            room, and read the drill log on the wall. Come during nap or during play and tell us
             which.
           </p>
           <p className="mt-3 text-[0.9375rem] leading-snug text-bg/75">

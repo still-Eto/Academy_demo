@@ -292,7 +292,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ slug: 
                 &ldquo;{quotes[0].quote}&rdquo;
               </blockquote>
               <figcaption className="mt-3 text-[0.9375rem] text-muted">
-                &mdash; {quotes[0].name}, parent in the {program.label} ({program.ages}),{" "}
+                {quotes[0].name}, parent in the {program.label} ({program.ages}),{" "}
                 {quotes[0].year}
               </figcaption>
             </figure>

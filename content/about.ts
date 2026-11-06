@@ -23,7 +23,7 @@ export const story = {
 export const practices = [
   {
     heading: "Every child goes outside twice a day, in every season, down to 20°F",
-    body: "Forty-five minutes in the morning and forty-five in the afternoon, in the two fenced yards. Babies get twenty to thirty minutes. Below 20°F or in lightning we use the gym instead. We do not skip it because it is cold — we ask you for boots and a warmer coat.",
+    body: "Forty-five minutes in the morning and forty-five in the afternoon, in the two fenced yards. Babies get twenty to thirty minutes. Below 20°F or in lightning we use the gym instead. We do not skip it because it is cold. We ask you for boots and a warmer coat.",
   },
   {
     heading: "Your child’s teachers stay in your child’s room, all year",
@@ -68,7 +68,7 @@ export const directorNote = {
   paragraphs: [
     "I have worked here for twelve years and owned it for seven, and the thing I care most about is the part of this job that is boring: the same teachers in the same rooms, the ratios holding on a Friday afternoon in February, the drill log actually being filled in.",
     "You will hear a lot of language about philosophy when you tour centers this month. I would ask you instead to look at the ratio, ask how long the teachers have been there, and ask whether you can walk in unannounced. Those three answers tell you nearly everything.",
-    "If you write to me, I write back myself, within one business day. Ask me anything — including what we are not good at.",
+    "If you write to me, I write back myself, within one business day. Ask me anything, including what we are not good at.",
   ],
   signature: signatureImage,
 };

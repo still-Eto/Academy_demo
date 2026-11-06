@@ -35,7 +35,7 @@ export const fees = [
     amount: "$75",
     cadence: "per semester, per child",
     detail:
-      "Two a year — August and January. It covers art materials, the classroom’s consumables and your child’s own portfolio.",
+      "Two a year, in August and January. It covers art materials, the classroom’s consumables and your child’s own portfolio.",
   },
 ];
 
@@ -50,7 +50,7 @@ export const included = [
 ];
 
 export const notIncluded = [
-  "Diapers and wipes — you supply these",
+  "Diapers and wipes",
   "A nap blanket, which goes home to be washed every Friday",
   "A change of clothes to keep in your child’s cubby",
 ];
@@ -64,7 +64,7 @@ export const discounts = [
   {
     label: "CCAP",
     detail:
-      "We accept the Illinois Child Care Assistance Program. As of July 1, 2026 CCAP is administered by the Illinois Department of Early Childhood rather than IDHS — your case moved automatically and your existing approval still counts. Ellen handles the paperwork with you.",
+      "We accept the Illinois Child Care Assistance Program. As of July 1, 2026 CCAP is administered by the Illinois Department of Early Childhood rather than IDHS. Your case moved automatically and your existing approval still counts. Ellen handles the paperwork with you.",
   },
   {
     label: "Employer childcare benefits",
@@ -88,5 +88,5 @@ export const noHiddenCosts =
 
 export const withdrawal = {
   headline: "If you leave",
-  body: "Thirty days’ written notice — an email to Marisol is enough. You pay for those thirty days and nothing after them. We don’t hold a last month’s tuition, so there is nothing to refund and nothing to chase. The registration fee and any supply fee already billed stay with us.",
+  body: "Thirty days’ written notice. An email to Marisol is enough. You pay for those thirty days and nothing after them. We don’t hold a last month’s tuition, so there is nothing to refund and nothing to chase. The registration fee and any supply fee already billed stay with us.",
 };

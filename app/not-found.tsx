@@ -21,7 +21,7 @@ export default function NotFound() {
         <div className="shell section">
           <p className="eyebrow mb-3">404</p>
           <h1 className="measure-tight text-[2rem] leading-[1.1] lg:text-[3rem]">
-            Sorry &mdash; that page has moved or never existed.
+            Sorry, that page has moved or never existed.
           </h1>
           <p className="measure mt-5 text-[1.0625rem] leading-relaxed text-muted lg:text-[1.1875rem]">
             Here are the three pages people are usually looking for. Or call{" "}

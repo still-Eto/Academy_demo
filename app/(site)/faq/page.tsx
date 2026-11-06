@@ -9,7 +9,7 @@ import { site } from "@/content/site.config";
 
 export const metadata: Metadata = {
   title: "Questions parents actually ask",
-  description: `Waitlists, toilet training, sick days, snow days, part-time, dropping in unannounced, naps, screens, discipline, food, moving up a room, and how to leave — answered plainly by ${site.name}.`,
+  description: `Waitlists, toilet training, sick days, snow days, part-time, dropping in unannounced, naps, screens, discipline, food, moving up a room, and how to leave, answered plainly by ${site.name}.`,
   alternates: { canonical: "/faq" },
 };
 

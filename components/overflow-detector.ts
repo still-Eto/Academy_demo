@@ -28,7 +28,7 @@ export function startOverflowDetector() {
     );
 
     console.warn(
-      `[overflow] viewport ${limit}px — ${outermost.length} element(s) exceed it:`,
+      `[overflow] viewport ${limit}px: ${outermost.length} element(s) exceed it:`,
       outermost.map(({ el, right }) => ({
         tag: el.tagName.toLowerCase(),
         class: String(el.className),

@@ -478,7 +478,7 @@ export default function HomePage() {
                         &ldquo;{t.quote}&rdquo;
                       </blockquote>
                       <figcaption className="mt-4 text-[0.9375rem] leading-snug text-muted lg:mt-5">
-                        &mdash; {t.name}, parent in the {room.label} ({room.ages}), {t.year}
+                        {t.name}, parent in the {room.label} ({room.ages}), {t.year}
                       </figcaption>
                     </figure>
                   </Reveal>

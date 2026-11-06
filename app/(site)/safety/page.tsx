@@ -193,9 +193,9 @@ export default function SafetyPage() {
           </dl>
 
           <p className="mt-6 text-[0.9375rem] leading-relaxed text-muted">
-            Anything on this page you would like to see for yourself &mdash; the drill log, the
-            playground checklist, the health department report, a teacher&rsquo;s certification
-            card &mdash; ask on the tour and we will show you the actual document.{" "}
+            Ask on the tour to see anything on this page for yourself, and we will show you the
+            actual document: the drill log, the playground checklist, the health department report,
+            a teacher&rsquo;s certification card.{" "}
             <Link href="/faq" className="font-semibold text-brand underline underline-offset-4">
               More questions parents ask
             </Link>

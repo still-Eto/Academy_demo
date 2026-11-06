@@ -33,7 +33,7 @@ export default function TuitionPage() {
         title="Every rate, and every fee, on one page"
         lead={
           <>
-            A parent who cannot find a price assumes she cannot afford it. Here is all of it &mdash;
+            A parent who cannot find a price assumes she cannot afford it. Here is all of it:
             weekly, monthly, and the two fees that are not tuition. {noHiddenCosts}
           </>
         }

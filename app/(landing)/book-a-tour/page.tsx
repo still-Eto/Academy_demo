@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 const STEPS = [
   {
     title: `${site.director.firstName} emails you a time`,
-    body: "Within one business day, written by her. She checks your day against what is actually happening in the rooms — no automated calendar will offer you a slot during a fire drill.",
+    body: "Within one business day, written by her. She checks your day against what is actually happening in the rooms. No automated calendar will offer you a slot during a fire drill.",
   },
   {
     title: "You come for 45 minutes",
@@ -70,7 +70,7 @@ export default function BookATourPage() {
               45 minutes. {dayProgramSpaces} spaces open across the day program this {season()}.
             </span>
             <span className="hidden lg:inline">
-              45 minutes, during nap or during play &mdash; you choose which.{" "}
+              45 minutes, during nap or during play, whichever you choose.{" "}
               {dayProgramSpaces} spaces are open across the day program this {season()}.
             </span>
           </p>
@@ -158,7 +158,7 @@ export default function BookATourPage() {
                     &ldquo;{t.quote}&rdquo;
                   </blockquote>
                   <figcaption className="mt-2 text-[0.875rem] text-muted">
-                    &mdash; {t.name}, parent in the {room.label} ({room.ages}), {t.year}
+                    {t.name}, parent in the {room.label} ({room.ages}), {t.year}
                   </figcaption>
                 </figure>
               );
