@@ -38,8 +38,9 @@ export const site = {
    */
   titleTagline: "Early learning in Elmhurst, IL",
 
-  /** Used for canonical URLs, sitemap and OG tags. */
-  url: "https://www.bridgewoodacademy.com",
+  /** Used for canonical URLs, sitemap and OG tags. The demo's own address, so a shared link and its
+      preview image resolve on the host that serves the demo (the school is fictional, its domain is not ours). */
+  url: "https://bridgewood-academy.vercel.app",
 
   founded: 2011,
 

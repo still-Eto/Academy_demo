@@ -27,7 +27,7 @@ export async function generateMetadata({
   if (!program) return {};
 
   return {
-    title: `${program.label} — ${program.ages}`,
+    title: `${program.label}: ${program.ages}`,
     description: `${program.label} at ${site.name}: ${program.ages}, ${program.ratio} ratio against an Illinois minimum of ${program.stateRatio}, ${program.classSize} children, $${program.rate5} a week for five days. ${program.oneLiner}`,
     alternates: { canonical: `/programs/${program.slug}` },
   };
@@ -48,7 +48,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ slug: 
         data={breadcrumbLd([
           { name: "Home", path: "/" },
           { name: "Programs", path: "/programs" },
-          { name: `${program.label} — ${program.ages}`, path: `/programs/${program.slug}` },
+          { name: `${program.label}: ${program.ages}`, path: `/programs/${program.slug}` },
         ])}
       />
 

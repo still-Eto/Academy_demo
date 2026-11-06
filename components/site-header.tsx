@@ -23,7 +23,12 @@ const NAV = [
 export type HeaderRoom = { slug: string; label: string; ages: string };
 
 export function SiteHeader({ rooms }: { rooms: HeaderRoom[] }) {
-  const pathname = usePathname();
+  /* The hourly ISR re-render on Vercel reports the home page as "/index"
+     (the build-time prerender says "/"). Read as-is, that cached HTML carried
+     the in-flow header, and the whole page jumped 77 px when the client lifted
+     it out of the flow (layout shift on every visit after the first hour). */
+  const rawPathname = usePathname();
+  const pathname = rawPathname === "/index" ? "/" : rawPathname;
   const [menuOpen, setMenuOpen] = useState(false);
   const [programsOpen, setProgramsOpen] = useState(false);
 

@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: site.name,
     url: site.url,
-    title: `${site.name} — ${site.tagline}`,
+    title: homeTitle,
     description: `1:3 infant ratio, licensed #${site.license.number}, NAEYC accredited. Openings listed by room and updated monthly.`,
   },
   twitter: { card: "summary_large_image" },
