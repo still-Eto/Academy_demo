@@ -175,8 +175,8 @@ export function SiteFooter() {
           */}
           {noIndex && (
             <p className="mt-2">
-              Demonstration site. {site.name} is not a real school: the license number, address and
-              phone number on these pages are invented, and the accreditations shown are examples of
+              Demonstration site. {site.name} is a sample school: the license number, address and
+              phone number on these pages are sample data, and the accreditations shown are examples of
               what a center would list rather than credentials this one holds.
             </p>
           )}
